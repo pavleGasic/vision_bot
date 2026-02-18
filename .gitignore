@@ -1,0 +1,79 @@
+# Colcon build artifacts
+build/
+install/
+log/
+
+# ROS 2 generated files
+*.log
+*.pyc
+*.pyo
+__pycache__/
+
+############################
+# CMake
+############################
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+############################
+# Python
+############################
+
+*.egg-info/
+.eggs/
+dist/
+*.egg
+*.whl
+pip-wheel-metadata/
+
+############################
+# VSCode
+############################
+
+.vscode/
+
+############################
+# CLion / IntelliJ
+############################
+
+.idea/
+*.iml
+
+############################
+# QtCreator
+############################
+
+*.autosave
+
+############################
+# Linux
+############################
+
+*~
+*.swp
+*.swo
+
+############################
+# Mac
+############################
+
+.DS_Store
+
+############################
+# ROS bag files (optional)
+############################
+
+*.db3
+*.bag
+*.bag.active
+
+############################
+# Gazebo
+############################
+
+*.world~
+*.sdf~
