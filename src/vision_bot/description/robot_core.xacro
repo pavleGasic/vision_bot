@@ -30,14 +30,14 @@
 
     <link name="chassis">
         <visual>
-            <origin xyz="0 0 0.075"/>
+            <origin xyz="0 0 0.1"/>
             <geometry>
                 <box size="0.4 0.3 0.15"/>
             </geometry>
             <material name="orange"/>
         </visual>
         <collision>
-            <origin xyz="0 0 0.075"/>
+            <origin xyz="0 0 0.1"/>
             <geometry>
                 <box size="0.4 0.3 0.15"/>
             </geometry>
@@ -53,7 +53,7 @@
     <joint name="rear_left_wheel_joint" type="continuous">
         <parent link="chassis"/>
         <child link="rear_left_wheel"/>
-        <origin xyz="-0.1 0.175 0" rpy="-${pi/2} 0 0"/>
+        <origin xyz="-0.1 0.175 0.05" rpy="-${pi/2} 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
@@ -80,7 +80,7 @@
     <joint name="rear_right_wheel_joint" type="continuous">
         <parent link="chassis"/>
         <child link="rear_right_wheel"/>
-        <origin xyz="-0.1 -0.175 0" rpy="${pi/2} 0 0"/>
+        <origin xyz="-0.1 -0.175 0.05" rpy="${pi/2} 0 0"/>
         <axis xyz="0 0 -1"/>
     </joint>
 
@@ -107,7 +107,7 @@
     <joint name="front_left_wheel_joint" type="continuous">
         <parent link="chassis"/>
         <child link="front_left_wheel"/>
-        <origin xyz="0.1 0.175 0" rpy="-${pi/2} 0 0"/>
+        <origin xyz="0.1 0.175 0.05" rpy="-${pi/2} 0 0"/>
         <axis xyz="0 0 1"/>
     </joint>
 
@@ -134,8 +134,8 @@
     <joint name="front_right_wheel_joint" type="continuous">
         <parent link="chassis"/>
         <child link="front_right_wheel"/>
-        <origin xyz="0.1 -0.175 0" rpy="-${pi/2} 0 0"/>
-        <axis xyz="0 0 1"/>
+        <origin xyz="0.1 -0.175 0.05" rpy="${pi/2} 0 0"/>
+        <axis xyz="0 0 -1"/>
     </joint>
 
     <link name="front_right_wheel">
