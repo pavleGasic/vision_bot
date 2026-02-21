@@ -56,8 +56,13 @@ def generate_launch_description():
     ros_gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        parameters=[bridge_params],
-        output='screen')
+        arguments=['--ros-args', '-p', f'config_file:={bridge_params}'])
+    
+    ros_gz_image_bridge = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=["/camera/image_raw"]
+    )
     
 
     return LaunchDescription([
@@ -68,4 +73,5 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         diff_drive_spawner,
         ros_gz_bridge,
+        ros_gz_image_bridge
     ])

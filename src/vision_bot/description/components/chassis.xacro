@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    
+    <xacro:include filename="inertia_macros.xacro" />
+
+    <xacro:property name="chassis_length" value="0.2" />
+    <xacro:property name="chassis_width" value="0.135"/>
+    <xacro:property name="chassis_height" value="0.05"/>
+    <xacro:property name="chassis_mass" value="1.5"/>
+    <xacro:property name="chassis_offset_z" value="0.018"/>
+
+    <xacro:property name="cpu_length" value="0.085" />
+    <xacro:property name="cpu_width" value="0.056"/>
+    <xacro:property name="cpu_height" value="0.0015"/>
+    <xacro:property name="cpu_mass" value="0.1"/>
+
+    <!-- CHASSIS LINK -->
+    
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0 ${chassis_offset_z}"/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" />
+            <geometry>
+                <box size="${chassis_length} ${chassis_width} ${chassis_height}" />
+            </geometry>
+            <material name="black" />
+        </visual>
+        <collision>
+            <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" />
+            <geometry>
+                <box size="${chassis_length} ${chassis_width} ${chassis_height}" />
+            </geometry>
+            <material name="black" />
+        </collision>
+        <xacro:inertial_box mass="${chassis_mass}" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
+            <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" rpy="0 0 0"/>
+        </xacro:inertial_box>
+    </link>
+
+    <joint name="cpu_joint" type="fixed">
+        <parent link="chassis" />
+        <child link="cpu_link" />
+        <origin xyz="${chassis_length / 2} 0 ${chassis_height + (cpu_height / 2)}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="cpu_link">
+        <visual>
+            <geometry>
+                <box size="${cpu_length} ${cpu_width} ${cpu_height}"/>
+            </geometry>
+            <material name="orange" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${cpu_length} ${cpu_width} ${cpu_height}"/>
+            </geometry>
+            <material name="orange" />
+        </collision>
+        <xacro:inertial_box mass="${cpu_mass}" x="${cpu_length}" y="${cpu_width}" z="${cpu_height}">
+            <origin xyz="0 0 0.0" rpy="0 0 0" />
+        </xacro:inertial_box>
+    </link>
+</robot>
