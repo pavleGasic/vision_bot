@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="chassis_length" value="0.2" />
+    <xacro:property name="chassis_height" value="0.05"/>
+    <xacro:property name="chassis_offset_z" value="0.018"/>
+
+
+    <xacro:property name="uss_length" value="0.02" />
+    <xacro:property name="uss_width" value="0.04"/>
+    <xacro:property name="uss_height" value="0.015"/>
+
+    <xacro:property name="uss_offset_x" value="${chassis_length + (uss_height / 2)}" />
+    <xacro:property name="uss_offset_z" value="${chassis_offset_z}"/>
+
+    <joint name="front_uss_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_uss_link"/>
+        <origin xyz="${uss_offset_x} 0 ${uss_offset_z}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="front_uss_link">
+        <visual>
+            <geometry>
+                <box size="${uss_length} ${uss_width} ${uss_height}"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <gazebo reference="front_uss_link">
+        <sensor name="sonar_front" type="gpu_lidar">
+            <topic>robot/sonar_front</topic>
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <lidar>
+                <scan>
+                    <horizontal>
+                        <samples>10</samples>
+                        <min_angle>-0.01</min_angle>
+                        <max_angle>0.01</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </lidar>
+            <always_on>1</always_on>
+            <visualize>true</visualize>
+            <gz_frame_id>laser_frame</gz_frame_id>
+        </sensor>
+    </gazebo>
+    
+</robot>

@@ -36,6 +36,9 @@
         <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
             <parameters>$(find vision_bot)/config/controllers.yaml</parameters>
         </plugin>
+        <plugin name="gz::sim::systems::Sensors"
+                filename="gz-sim-sensors-system">
+        </plugin>
     </gazebo>
     
 </robot>
