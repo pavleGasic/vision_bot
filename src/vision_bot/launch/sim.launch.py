@@ -17,6 +17,12 @@ def generate_launch_description():
                 launch_arguments={'use_sim_time': 'true'}.items()
     )
 
+    nodes = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    [os.path.join(get_package_share_directory(package_name), 'launch', 'nodes.launch.py')]),
+                launch_arguments={'use_sim_time': 'true'}.items()
+    )
+
     twist_stamper = Node(
         package='twist_stamper',
         executable='twist_stamper',
@@ -67,6 +73,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         model,
+        nodes,
         twist_stamper,
         gazebo,
         spawn_model,
