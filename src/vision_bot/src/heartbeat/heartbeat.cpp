@@ -12,7 +12,7 @@ HeartbeatPubNode::HeartbeatPubNode() : Node("heartbeat_pub_node")
   publisher_ = this->create_publisher<std_msgs::msg::String>(
     "heartbeat", 10
   );
-  timer_ = this->create_wall_timer(1s,
+  timer_ = this->create_wall_timer(10s,
     std::bind(&HeartbeatPubNode::publish_heartbeat, this)
   );
 }
