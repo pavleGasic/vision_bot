@@ -31,6 +31,11 @@ ament_python_install_package(perception
   PACKAGE_DIR src/perception
 )
 
+install(PROGRAMS
+  src/perception/yolo_detector_node.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)

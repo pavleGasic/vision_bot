@@ -16,10 +16,5 @@ setup(
     maintainer='your_name',
     maintainer_email='your_email@example.com',
     description='Vision bot with YOLO',
-    license='TODO',
-    entry_points={
-        'console_scripts': [
-            'yolo_detector_node = perception.yolo_detector_node:main',
-        ],
-    },
+    license='TODO'
 )

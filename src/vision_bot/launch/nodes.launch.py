@@ -11,7 +11,7 @@ def generate_launch_description():
             ),
             Node(
                 package="vision_bot",
-                executable="yolo_detector_node",
+                executable="yolo_detector_node.py",
                 name="yolo_detector",
                 parameters=[{
                     'model': 'yolov8n.pt',
