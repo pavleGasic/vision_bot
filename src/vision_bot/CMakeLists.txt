@@ -6,7 +6,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(heartbeat src/heartbeat/heartbeat.cpp)
@@ -23,6 +25,10 @@ install(
   description
   config
   DESTINATION share/${PROJECT_NAME}/
+)
+
+ament_python_install_package(perception
+  PACKAGE_DIR src/perception
 )
 
 if(BUILD_TESTING)

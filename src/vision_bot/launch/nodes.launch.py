@@ -8,6 +8,17 @@ def generate_launch_description():
                 package="vision_bot",
                 executable="heartbeat",
                 name="heartbeat_pub_node"
+            ),
+            Node(
+                package="vision_bot",
+                executable="yolo_detector_node",
+                name="yolo_detector",
+                parameters=[{
+                    'model': 'yolov8n.pt',
+                    'confidence': 0.5,
+                    'device': 'cpu'
+                }],
+                output="screen"
             )
         ]
     )
