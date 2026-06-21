@@ -11,6 +11,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     package_name='vision_bot'
     rosbridge_server='rosbridge_server'
+    world_file=os.path.join(get_package_share_directory(package_name), 'worlds', 'apartment.sdf')
 
     model = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
@@ -35,7 +36,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                     [os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-                launch_arguments={'gz_args': '-r empty.sdf', 'on_exit_shutdown': 'true'}.items()
+                launch_arguments={'gz_args': f'-r {world_file}', 'on_exit_shutdown': 'true'}.items()
     )
 
     spawn_model = Node(

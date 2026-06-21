@@ -10,12 +10,19 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(vision_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_executable(heartbeat src/heartbeat/heartbeat.cpp)
+add_executable(navigation src/navigation/navigation_node.cpp)
 ament_target_dependencies(heartbeat rclcpp std_msgs)
+ament_target_dependencies(navigation rclcpp std_msgs geometry_msgs sensor_msgs nav_msgs vision_msgs)
 
 install(TARGETS
   heartbeat
+  navigation
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -24,6 +31,7 @@ install(
   launch
   description
   config
+  worlds
   DESTINATION share/${PROJECT_NAME}/
 )
 

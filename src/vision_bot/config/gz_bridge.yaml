@@ -20,7 +20,7 @@
   gz_topic_name: "cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
-  direction: GZ_TO_ROS
+  direction: ROS_TO_GZ
 
 - ros_topic_name: "joint_states"
   gz_topic_name: "joint_states"
