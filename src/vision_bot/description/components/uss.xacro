@@ -10,13 +10,16 @@
     <xacro:property name="uss_width" value="0.04"/>
     <xacro:property name="uss_height" value="0.015"/>
 
-    <xacro:property name="uss_offset_x" value="${chassis_length + (uss_height / 2)}" />
+    <xacro:property name="uss_offset_x" value="${chassis_length + (uss_height / 2) + 0.01}" />
     <xacro:property name="uss_offset_z" value="${chassis_offset_z}"/>
+
+    <xacro:property name="uss_side_offset_y" value="0.043" />
+    <xacro:property name="uss_side_angle" value="0.45" />
 
     <joint name="front_uss_joint" type="fixed">
         <parent link="chassis"/>
         <child link="front_uss_link"/>
-        <origin xyz="${uss_offset_x} 0 ${uss_offset_z}" rpy="0 0 0"/>
+        <origin xyz="${uss_offset_x + 0.01} 0 ${uss_offset_z}" rpy="0 0 0"/>
     </joint>
 
     <link name="front_uss_link">
@@ -27,6 +30,37 @@
             <material name="blue"/>
         </visual>
     </link>
+
+    <joint name="front_left_uss_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_left_uss_link"/>
+        <origin xyz="${uss_offset_x} ${uss_side_offset_y} ${uss_offset_z}" rpy="0 0 ${uss_side_angle}"/>
+    </joint>
+
+    <link name="front_left_uss_link">
+        <visual>
+            <geometry>
+                <box size="${uss_length} ${uss_width} ${uss_height}"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+    <joint name="front_right_uss_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="front_right_uss_link"/>
+        <origin xyz="${uss_offset_x} -${uss_side_offset_y} ${uss_offset_z}" rpy="0 0 -${uss_side_angle}"/>
+    </joint>
+
+    <link name="front_right_uss_link">
+        <visual>
+            <geometry>
+                <box size="${uss_length} ${uss_width} ${uss_height}"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link>
+
 
     <gazebo reference="front_uss_link">
         <sensor name="sonar_front" type="gpu_lidar">

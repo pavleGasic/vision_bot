@@ -5,7 +5,14 @@
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "vision_msgs/msg/detection2_d_array.hpp"
 
-enum class NavState { WAITING_FOR_TASK, EXPLORING, APPROACHING };
+enum class NavState 
+{ 
+  WAITING_FOR_TASK,
+  EXPLORING,
+  BACKING_UP,
+  TURNING, 
+  APPROACHING
+};
 
 class NavigationNode : public rclcpp::Node
 {
@@ -33,13 +40,20 @@ class NavigationNode : public rclcpp::Node
     NavState state_{NavState::WAITING_FOR_TASK};
     std::string target_class_;
     vision_msgs::msg::Detection2DArray::SharedPtr latest_detections_;
-    float uss_min_range_{12.0f};
+    double uss_min_range_ = 12.0;
 
-    double wall_follow_speed_;
-    double rotation_speed_;
-    double obstacle_distance_;
-    double approach_distance_;
-    double approach_speed_;
-    double camera_center_x_;
-    double angular_gain_;
+    double wall_follow_speed_ = 0.9;
+    double rotation_speed_ = 0.95;
+    double obstacle_distance_ = 0.5;
+    double approach_distance_ = 0.8;
+    double approach_speed_ = 0.1;
+    double camera_center_x_ = 640.0;
+    double angular_gain_ = 0.003;
+
+    double backup_duration_ = 3;
+    double turning_duration_ = 10;
+    double turn_duration_ = 0.8;
+    double backup_speed_ = 0.1;
+    
+    rclcpp::Time escape_start_time_;
 };

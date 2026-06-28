@@ -4,14 +4,6 @@
 
 NavigationNode::NavigationNode() : Node("navigation_node")
 {
-  wall_follow_speed_ = 0.15;
-  rotation_speed_ = 0.4;
-  obstacle_distance_ = 0.5;
-  approach_distance_ = 0.8;
-  approach_speed_ = 0.1;
-  camera_center_x_ = 640.0;
-  angular_gain_ = 0.003;
-
   cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>(
     "/diff_drive_controller/cmd_vel_unstamped", 10);
   status_pub_ = create_publisher<std_msgs::msg::String>(
@@ -75,7 +67,7 @@ void NavigationNode::control_loop()
   switch (state_)
   {
     case NavState::WAITING_FOR_TASK:
-      publish_status("WAITING - send target to /navigation/target_class");
+      publish_status("WAITING_FOR_TASK, send target to /navigation/target_class");
       break;
     
     case NavState::EXPLORING: {
@@ -87,12 +79,46 @@ void NavigationNode::control_loop()
       }
       if (uss_min_range_ > obstacle_distance_) {
         cmd.linear.x = wall_follow_speed_;
-        cmd.angular.z = 0.1;
+        cmd.angular.z = 0.0;
       } else {
         cmd.linear.x = 0.0;
-        cmd.angular.z = rotation_speed_;
+        cmd.angular.z = 0.0;
+        escape_start_time_ = now();
+        state_ = NavState::BACKING_UP;
+        RCLCPP_INFO(get_logger(), "Obstacle detected, backing up...");
       }
       publish_status("EXPLORING, target: " + target_class_);
+      break;
+    }
+
+    case NavState::BACKING_UP: {
+      double elapsed = (now() - escape_start_time_).seconds();
+      if (elapsed < backup_duration_) {
+        cmd.linear.x = -backup_speed_;
+        cmd.angular.z = 0.0;
+        publish_status("BACKING_UP");
+      } else {
+        cmd.linear.x = 0.0;
+        cmd.linear.z = 0.0;
+        escape_start_time_ = now();
+        state_ = NavState::TURNING;
+        RCLCPP_INFO(get_logger(), "Backup done, turning...");
+      }
+      break;
+    }
+
+    case NavState::TURNING: {
+      double elapsed = (now() - escape_start_time_).seconds();
+      if (elapsed < turning_duration_) {
+        cmd.linear.x = 0.0;
+        cmd.angular.z = rotation_speed_;
+        publish_status("TURNING");
+      } else {
+        cmd.linear.x = 0.0;
+        cmd.linear.z = 0.0;
+        state_ = NavState::EXPLORING;
+        RCLCPP_INFO(get_logger(), "Turn done, resuming exlploration...");
+      }
       break;
     }
 
@@ -119,9 +145,9 @@ void NavigationNode::control_loop()
       publish_status("APPROACHING, target: " + target_class_);
       break;
     }
-
-    cmd_vel_pub_->publish(cmd);
   }
+  
+  cmd_vel_pub_->publish(cmd);
 }
 
 void NavigationNode::publish_status(const std::string & text) 
