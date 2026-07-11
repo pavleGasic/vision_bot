@@ -14,7 +14,7 @@
     <xacro:property name="uss_offset_z" value="${chassis_offset_z}"/>
 
     <xacro:property name="uss_side_offset_y" value="0.043" />
-    <xacro:property name="uss_side_angle" value="0.45" />
+    <xacro:property name="uss_side_angle" value="0.785" />
 
     <joint name="front_uss_joint" type="fixed">
         <parent link="chassis"/>
@@ -65,6 +65,56 @@
     <gazebo reference="front_uss_link">
         <sensor name="sonar_front" type="gpu_lidar">
             <topic>robot/sonar_front</topic>
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <lidar>
+                <scan>
+                    <horizontal>
+                        <samples>10</samples>
+                        <min_angle>-0.01</min_angle>
+                        <max_angle>0.01</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </lidar>
+            <always_on>1</always_on>
+            <visualize>true</visualize>
+            <gz_frame_id>laser_frame</gz_frame_id>
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="front_left_uss_link">
+        <sensor name="sonar_front_left" type="gpu_lidar">
+            <topic>robot/sonar_front_left</topic>
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>false</visualize>
+            <update_rate>10</update_rate>
+            <lidar>
+                <scan>
+                    <horizontal>
+                        <samples>10</samples>
+                        <min_angle>-0.01</min_angle>
+                        <max_angle>0.01</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </lidar>
+            <always_on>1</always_on>
+            <visualize>true</visualize>
+            <gz_frame_id>laser_frame</gz_frame_id>
+        </sensor>
+    </gazebo>
+
+    <gazebo reference="front_right_uss_link">
+        <sensor name="sonar_front_right" type="gpu_lidar">
+            <topic>robot/sonar_front_right</topic>
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
             <update_rate>10</update_rate>

@@ -34,8 +34,26 @@
   gz_type_name: "gz.msgs.CameraInfo"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "ultrasonic/front_raw"
-  gz_topic_name: "robot/sonar_front"
+# - ros_topic_name: "ultrasonic/front_raw"
+#   gz_topic_name: "robot/sonar_front"
+#   ros_type_name: "sensor_msgs/msg/LaserScan"
+#   gz_type_name: "gz.msgs.LaserScan"
+#   direction: GZ_TO_ROS
+
+# - ros_topic_name: "ultrasonic/front_left_raw"
+#   gz_topic_name: "robot/sonar_front_left"
+#   ros_type_name: "sensor_msgs/msg/LaserScan"
+#   gz_type_name: "gz.msgs.LaserScan"
+#   direction: GZ_TO_ROS
+
+# - ros_topic_name: "ultrasonic/front_right_raw"
+#   gz_topic_name: "robot/sonar_front_right"
+#   ros_type_name: "sensor_msgs/msg/LaserScan"
+#   gz_type_name: "gz.msgs.LaserScan"
+#   direction: GZ_TO_ROS
+
+- ros_topic_name: "scan"
+  gz_topic_name: "scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS

@@ -11,7 +11,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     package_name='vision_bot'
     rosbridge_server='rosbridge_server'
-    world_file=os.path.join(get_package_share_directory(package_name), 'worlds', 'apartment.sdf')
+    world_file=os.path.join(get_package_share_directory(package_name), 'worlds', 'test_world.sdf')
 
     model = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
