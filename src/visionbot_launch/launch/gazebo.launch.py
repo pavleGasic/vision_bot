@@ -14,7 +14,8 @@ from launch_ros.actions import Node
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 def generate_launch_description():
-    visionbot_description_dir = get_package_share_directory('vision_bot')
+    visionbot_description_dir = get_package_share_directory('visionbot_description')
+    visionbot_launch_dir = get_package_share_directory('visionbot_launch')
     rosbridge_server='rosbridge_server'
     world_file=os.path.join(visionbot_description_dir, 'worlds', 'small_house.world')
     
@@ -80,7 +81,7 @@ def generate_launch_description():
             "--controller-manager",
             "/controller_manager"])
     
-    bridge_params = os.path.join(visionbot_description_dir, 'config', 'gz_bridge.yaml')
+    bridge_params = os.path.join(visionbot_launch_dir, 'config', 'gz_bridge.yaml')
     ros_gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',

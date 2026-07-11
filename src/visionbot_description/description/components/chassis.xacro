@@ -26,7 +26,7 @@
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/meshes/robot_base_link.stl" />
+        <mesh filename="package://visionbot_description/description/meshes/robot_base_link.stl" />
       </geometry>
       <material name="black" />
     </visual>
@@ -55,7 +55,7 @@
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/meshes/rpi5_link.stl" />
+        <mesh filename="package://visionbot_description/description/meshes/rpi5_link.stl" />
       </geometry>
       <material name="green" />
     </visual>

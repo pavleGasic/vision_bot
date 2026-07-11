@@ -7,14 +7,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/meshes/laser_link.stl" />
+        <mesh filename="package://visionbot_description/description/meshes/laser_link.stl" />
       </geometry>
       <material name="black" />
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/meshes/laser_link.stl" />
+        <mesh filename="package://visionbot_description/description/meshes/laser_link.stl" />
       </geometry>
     </collision>
     <xacro:inertial_lidar />

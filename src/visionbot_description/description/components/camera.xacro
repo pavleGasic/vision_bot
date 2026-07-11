@@ -54,7 +54,7 @@
     <visual>
       <origin xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/meshes/rpi_camera_link.stl" />
+        <mesh filename="package://visionbot_description/description/meshes/rpi_camera_link.stl" />
       </geometry>
       <material name="green" />
     </visual>
