@@ -21,7 +21,6 @@ diff_drive_controller:
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
     wheel_separation_multiplier: 1.0
-    use_stamped_vel: false
 
     publish_rate: 50.0
     pose_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.01]

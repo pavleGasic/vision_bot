@@ -11,11 +11,19 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  set(ament_cmake_copyright_FOUND TRUE)
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+include_directories(include)
+
+add_executable(heartbeat src/heartbeat.cpp)
+ament_target_dependencies(heartbeat rclcpp std_msgs)
+
+install(
+  DIRECTORY include
+  DESTINATION include
+)
+
+install(TARGETS
+  heartbeat
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()

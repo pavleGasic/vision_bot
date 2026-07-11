@@ -50,7 +50,8 @@
       <topic>scan</topic>
       <update_rate>5</update_rate>
       <gz_frame_id>lidar_link</gz_frame_id>
-      <ray>
+      <frame_id>lidar_link</frame_id>
+      <lidar>
         <scan>
           <horizontal>
             <samples>360</samples>
@@ -69,13 +70,13 @@
           <mean>0.0</mean>
           <stddev>0.01</stddev>
         </noise>
-      </ray>
+      </lidar>
     </sensor>
   </gazebo>
 
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find visionbot_launch)/config/controllers.yaml</parameters>
+      <parameters>/home/gasa14/Workspaces/dev_ws/src/visionbot_launch/config/controllers.yaml</parameters>
     </plugin>
     <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>

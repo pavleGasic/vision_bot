@@ -12,7 +12,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     model_arg = DeclareLaunchArgument(
         name="model",
-        default_value=os.path.join(get_package_share_directory('vision_bot'), 'description', 'robot.urdf.xacro'),
+        default_value=os.path.join(get_package_share_directory('visionbot_description'), 'description', 'robot.urdf.xacro'),
         description="Absolute path to robot URDF file"
     )
     

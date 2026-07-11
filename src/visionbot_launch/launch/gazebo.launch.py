@@ -35,12 +35,8 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description_config}]
     )
     
-    twist_stamper = Node(
-        package='twist_stamper',
-        executable='twist_stamper',
-        parameters=[{'use_sim_time': True}],
-        remappings=[('/cmd_vel_in', '/diff_drive_controller/cmd_vel_unstamped'),
-                    ('/cmd_vel_out', '/diff_drive_controller/cmd_vel')]
+    nodes_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(visionbot_launch_dir, 'launch', 'nodes.launch.py'))
     )
     
     model_path = str(Path(visionbot_description_dir).parent.resolve())
@@ -81,6 +77,27 @@ def generate_launch_description():
             "--controller-manager",
             "/controller_manager"])
     
+    twist_mux_launch = IncludeLaunchDescription(
+      os.path.join(get_package_share_directory('twist_mux'),
+      'launch',
+      'twist_mux_launch.py'
+      ),
+      launch_arguments={
+        "cmd_vel_out": "/diff_drive_controller/cmd_vel",
+        "config_topics": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_topics.yaml'),
+        "config_locks": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_locks.yaml'),
+        "config_joy": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_joy.yaml'),
+        'use_sim_time': 'true'
+      }.items()
+    )
+      
+    twist_mux = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        parameters=[{'use_sim_time': True}],
+        remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel')],
+      )
+    
     bridge_params = os.path.join(visionbot_launch_dir, 'config', 'gz_bridge.yaml')
     ros_gz_bridge = Node(
         package='ros_gz_bridge',
@@ -97,12 +114,14 @@ def generate_launch_description():
     return LaunchDescription([
         model_arg,
         robot_state_publisher_node,
-        twist_stamper,
+        nodes_launch,
         gazebo_resource_path,
         gazebo,
         gazebo_spawner,
         joint_state_broadcaster_spawner,
         diff_drive_controller_spawner,
+        twist_mux_launch,
+        twist_mux,
         ros_gz_bridge,
         rosbridge_launch
     ])

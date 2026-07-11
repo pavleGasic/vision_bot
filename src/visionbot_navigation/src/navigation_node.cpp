@@ -1,4 +1,4 @@
-#include "navigation_node.hpp"
+#include "../include/visionbot_navigation/navigation_node.hpp"
 #include <limits>
 #include <algorithm>
 

@@ -1,6 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "heartbeat.hpp"
+#include "../include/visionbot_navigation/heartbeat.hpp"
 
 #include <chrono>
 #include <functional>
