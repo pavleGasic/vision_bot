@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="chassis_height" value="0.035" />
+  <xacro:property name="lidar_height" value="0.025" />
+  <xacro:property name="lidar_offset_z" value="${chassis_height + lidar_height}" />
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://visionbot_description/meshes/laser_link.stl" />
+      </geometry>
+      <material name="black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://visionbot_description/meshes/laser_link.stl" />
+      </geometry>
+    </collision>
+    <xacro:inertial_lidar />
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="chassis" />
+    <child link="lidar_link" />
+    <origin xyz="0 0 ${lidar_offset_z}" rpy="0 0 ${pi}" />
+  </joint>
+</robot>
