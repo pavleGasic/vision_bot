@@ -17,7 +17,7 @@ def generate_launch_description():
     visionbot_description_dir = get_package_share_directory('visionbot_description')
     visionbot_launch_dir = get_package_share_directory('visionbot_launch')
     rosbridge_server='rosbridge_server'
-    world_file=os.path.join(visionbot_description_dir, 'worlds', 'small_house.world')
+    world_file=os.path.join(visionbot_description_dir, 'worlds', 'empty.world')
     
     model_arg = DeclareLaunchArgument(
         name="model",
@@ -83,20 +83,13 @@ def generate_launch_description():
       'twist_mux_launch.py'
       ),
       launch_arguments={
-        "cmd_vel_out": "/diff_drive_controller/cmd_vel",
+        "cmd_vel_out": "/cmd_vel_mux_out",
         "config_topics": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_topics.yaml'),
         "config_locks": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_locks.yaml'),
         "config_joy": os.path.join(visionbot_launch_dir, 'config', 'twist_mux_joy.yaml'),
         'use_sim_time': 'true'
       }.items()
     )
-      
-    twist_mux = Node(
-        package='twist_mux',
-        executable='twist_mux',
-        parameters=[{'use_sim_time': True}],
-        remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel')],
-      )
     
     bridge_params = os.path.join(visionbot_launch_dir, 'config', 'gz_bridge.yaml')
     ros_gz_bridge = Node(
@@ -121,7 +114,6 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         diff_drive_controller_spawner,
         twist_mux_launch,
-        twist_mux,
         ros_gz_bridge,
         rosbridge_launch
     ])
