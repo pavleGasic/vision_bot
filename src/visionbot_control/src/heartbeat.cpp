@@ -7,29 +7,32 @@
 
 using namespace std::chrono_literals;
 
-HeartbeatPubNode::HeartbeatPubNode() : Node("heartbeat_pub_node")
+namespace visionbot_control
 {
-  publisher_ = this->create_publisher<std_msgs::msg::String>(
-    "heartbeat", 10
-  );
-  timer_ = this->create_wall_timer(10s,
-    std::bind(&HeartbeatPubNode::publish_heartbeat, this)
-  );
+  HeartbeatPubNode::HeartbeatPubNode() : Node("heartbeat_pub_node")
+  {
+    publisher_ = this->create_publisher<std_msgs::msg::String>(
+      "heartbeat", 10
+    );
+    timer_ = this->create_wall_timer(10s,
+      std::bind(&HeartbeatPubNode::publishHeartbeat, this)
+    );
+  }
+
+  void HeartbeatPubNode::publishHeartbeat()
+  {
+    auto message = std_msgs::msg::String();
+    message.data = "Alive";
+
+    publisher_->publish(message);
+  }
 }
 
-void HeartbeatPubNode::publish_heartbeat()
-{
-  auto message = std_msgs::msg::String();
-  message.data = "Alive";
+int main(int argc, char * argv[])
+  {
+    rclcpp::init(argc, argv);
+    rclcpp::spin(std::make_shared<visionbot_control::HeartbeatPubNode>());
+    rclcpp::shutdown();
 
-  publisher_->publish(message);
-}
-
-int main(int argc, char * argv[]) 
-{
-  rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<HeartbeatPubNode>());
-  rclcpp::shutdown();
-
-  return 0;
-}
+    return 0;
+  }

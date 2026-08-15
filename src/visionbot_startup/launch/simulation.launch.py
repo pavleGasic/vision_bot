@@ -37,36 +37,44 @@ def generate_launch_description():
   )
 
   control = IncludeLaunchDescription(
-    os.path.join(
-      get_package_share_directory('visionbot_control'),
-      'launch',
-      'control.launch.py'
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_control'),
+        'launch',
+        'control.launch.py'
+      )
     )
   )
 
   localization = IncludeLaunchDescription(
-    os.path.join(
-      get_package_share_directory('visionbot_navigation'),
-      'launch',
-      'global_localization.launch.py'
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_navigation'),
+        'launch',
+        'global_localization.launch.py'
+      )
     ),
     condition=UnlessCondition(use_slam)
   )
 
   slam = IncludeLaunchDescription(
-    os.path.join(
-      get_package_share_directory('visionbot_navigation'),
-      'launch',
-      'slam.launch.py'
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_navigation'),
+        'launch',
+        'slam.launch.py'
+      )
     ),
     condition=IfCondition(use_slam)
   )
 
   rviz = IncludeLaunchDescription(
-    os.path.join(
-      get_package_share_directory('visionbot_description'),
-      'launch',
-      'rviz.launch.py'
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_description'),
+        'launch',
+        'rviz.launch.py'
+      )
     )
   )
 

@@ -3,7 +3,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
-namespace visionbot_motion 
+namespace visionbot_motion
 {
   MotionPlannerNode::MotionPlannerNode(const rclcpp::NodeOptions & options)
     : Node("motion_planner_node", options)
@@ -20,9 +20,6 @@ namespace visionbot_motion
 
     controller_.updateParams(init_params);
 
-    param_callback_handle_ = add_on_set_parameters_callback(
-      std::bind(&MotionPlannerNode::onParametersChange, this, std::placeholders::_1));
-
     path_sub_ = create_subscription<nav_msgs::msg::Path>(
       "/astar/path", 10, std::bind(&MotionPlannerNode::pathCallback, this, std::placeholders::_1));
     cmd_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
@@ -35,6 +32,21 @@ namespace visionbot_motion
       std::chrono::milliseconds(100), std::bind(&MotionPlannerNode::controlLoop, this));
   }
 
+  std::optional<geometry_msgs::msg::TransformStamped> MotionPlannerNode::lookupTransform(
+    const tf2_ros::Buffer & tf_buffer,
+    const std::string & target_frame,
+    const std::string & source_frame
+  )
+  {
+    try {
+      return tf_buffer.lookupTransform(target_frame, source_frame, tf2::TimePointZero);
+    } catch (const tf2::TransformException & ex) {
+      RCLCPP_ERROR(get_logger(), "TF lookup failed [%s -> %s]: %s",
+        target_frame.c_str(), source_frame.c_str(), ex.what());
+      return std::nullopt;
+    }
+  }
+
   void MotionPlannerNode::pathCallback(const nav_msgs::msg::Path::SharedPtr path)
   {
     if (path->poses.empty()) {
@@ -42,33 +54,25 @@ namespace visionbot_motion
       return;
     }
 
-    std::lock_guard<std::mutex> lock(path_mutex_);
     path_handler_.setPath(*path);
   }
 
   void MotionPlannerNode::controlLoop()
   {
-    std::lock_guard<std::mutex> lock(path_mutex_);
-
     if (!path_handler_.hasPath()) {
       return;
     }
 
     geometry_msgs::msg::PoseStamped robot_pose;
 
-    try {
-      const auto tf_stamped = tf_buffer_->lookupTransform(
-        path_handler_.getFrameId(), robot_base_frame_, tf2::TimePointZero);
+    const auto tf = lookupTransform(*tf_buffer_, path_handler_.getFrameId(), robot_base_frame_);
+    if (!tf.has_value()) return;
+    robot_pose.header = tf.value().header;
+    robot_pose.pose.position.x = tf.value().transform.translation.x;
+    robot_pose.pose.position.y = tf.value().transform.translation.y;
+    robot_pose.pose.position.z = tf.value().transform.translation.z;
+    robot_pose.pose.orientation = tf.value().transform.rotation;
 
-      robot_pose.header = tf_stamped.header;
-      robot_pose.pose.position.x = tf_stamped.transform.translation.x;
-      robot_pose.pose.position.y = tf_stamped.transform.translation.y;
-      robot_pose.pose.position.z = tf_stamped.transform.translation.z;
-      robot_pose.pose.orientation = tf_stamped.transform.rotation;
-    } catch (const tf2::TransformException & ex) {
-      RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1000, "TF lookup error: %s", ex.what());
-      return;
-    }
 
     if (path_handler_.isGoalReached(robot_pose, goal_tolerance_)) {
       RCLCPP_INFO(get_logger(), "Target goal reached successfully.");
@@ -89,15 +93,12 @@ namespace visionbot_motion
     target_pose_pub_->publish(target_pose);
 
     geometry_msgs::msg::PoseStamped target_in_robot_frame;
-    try {
-      const auto tf_to_robot = tf_buffer_->lookupTransform(
-        robot_base_frame_, target_pose.header.frame_id, tf2::TimePointZero);
-      tf2::doTransform(target_pose, target_in_robot_frame, tf_to_robot);
-    } catch (const tf2::TransformException & ex) {
-      RCLCPP_ERROR(get_logger(), "Transform error to robot frame: %s", ex.what());
+    const auto tf_to_robot = lookupTransform(*tf_buffer_, robot_base_frame_, target_pose.header.frame_id);
+    if (!tf_to_robot.has_value()) {
       stopRobot();
       return;
     }
+    tf2::doTransform(target_pose, target_in_robot_frame, tf_to_robot.value());
 
     auto cmd_vel_data = controller_.computeVelocity(
       target_in_robot_frame.pose.position.x, target_in_robot_frame.pose.position.y);
@@ -113,35 +114,9 @@ namespace visionbot_motion
     geometry_msgs::msg::Twist stop_cmd;
     cmd_pub_->publish(stop_cmd);
   }
-
-  rcl_interfaces::msg::SetParametersResult MotionPlannerNode::onParametersChange(const std::vector<rclcpp::Parameter> & parameters)
-  {
-    auto current_params = controller_.getParams();
-    rcl_interfaces::msg::SetParametersResult result;
-    result.successful = true;
-
-    for (const auto & param : parameters) {
-    if (param.get_name() == "lookahead_distance") {
-      current_params.lookahead_dist = param.as_double();
-    } else if (param.get_name() == "max_linear_velocity") {
-      current_params.max_linear_vel = param.as_double();
-    } else if (param.get_name() == "min_linear_velocity") {
-      current_params.min_linear_vel = param.as_double();
-    } else if (param.get_name() == "max_angular_velocity") {
-      current_params.max_angular_vel = param.as_double();
-    } else if (param.get_name() == "k_curvature") {
-      current_params.k_curvature = param.as_double();
-    } else if (param.get_name() == "goal_tolerance") {
-      goal_tolerance_ = param.as_double();
-    }
-  }
-
-  controller_.updateParams(current_params);
-  return result;
-  }
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<visionbot_motion::MotionPlannerNode>();

@@ -8,11 +8,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY include
-  DESTINATION include
-)
-
-install(
   DIRECTORY config launch maps
   DESTINATION share/${PROJECT_NAME}
 )

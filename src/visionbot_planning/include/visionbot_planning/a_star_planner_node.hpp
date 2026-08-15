@@ -21,11 +21,17 @@ namespace visionbot_planning
       AStarPlannerNode();
 
     private:
-      void map_callback(const nav_msgs::msg::OccupancyGrid::SharedPtr map_msg);
-      void goal_callback(const geometry_msgs::msg::PoseStamped::SharedPtr pose_goal_msg);
+      std::optional<geometry_msgs::msg::TransformStamped> lookupTransform(
+        const tf2_ros::Buffer & tf_buffer,
+        const std::string & target_frame,
+        const std::string & source_frame
+      );
 
-      GridNode world_to_grid(const geometry_msgs::msg::Pose & pose) const;
-      geometry_msgs::msg::Pose grid_to_world(const GridNode & node) const;
+      void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr map_msg);
+      void goalCallback(const geometry_msgs::msg::PoseStamped::SharedPtr pose_goal_msg);
+
+      GridNode worldToGrid(const geometry_msgs::msg::Pose & pose) const;
+      geometry_msgs::msg::Pose gridToWorld(const GridNode & node) const;
 
       rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr map_sub_;
       rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr pose_goal_sub_;

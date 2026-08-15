@@ -29,7 +29,7 @@ namespace visionbot_motion
   {
     const double curvature = calculateCurvature(target_x, target_y);
 
-    double adaptive_linear_vel = params_.max_angular_vel / (1.0 + params_.k_curvature * std::abs(curvature));
+    double adaptive_linear_vel = params_.max_linear_vel / (1.0 + params_.k_curvature * std::abs(curvature));
     adaptive_linear_vel = std::clamp(adaptive_linear_vel, params_.min_linear_vel, params_.max_linear_vel);
 
     double angular_vel = adaptive_linear_vel * curvature;

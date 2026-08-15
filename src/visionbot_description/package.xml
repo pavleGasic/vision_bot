@@ -3,7 +3,7 @@
 <package format="3">
   <name>visionbot_description</name>
   <version>0.0.0</version>
-  <description>Main ROS2 package for VisionBot</description>
+  <description>ROS2 package for VisionBot description</description>
   <maintainer email="pavle.gasic7@gmail.com">Pavle Gasic</maintainer>
   <license>GPL-2.0 licence</license>
 

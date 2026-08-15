@@ -46,12 +46,11 @@ namespace visionbot_planning
         std::vector<int8_t> & visited_visualization
       );
 
-      bool is_in_bounds(const GridNode & node, uint32_t width, uint32_t height) const;
-      uint32_t node_to_index(const GridNode & node, uint32_t width) const;
-
     private:
-      double obstacle_cost_scale_{10.0};
-      double calculate_manhattan(const GridNode & node, const GridNode & goal) const;
-      double calculate_cell_cost(int8_t raw_cost) const;
+      double obstacle_cost_scale_{5.0};
+      double calculateManhattan(const GridNode & node, const GridNode & goal) const;
+      double calculateCellCost(int8_t raw_cost) const;
+      bool isInBounds(const GridNode & node, uint32_t width, uint32_t height) const;
+      uint32_t nodeToIndex(const GridNode & node, uint32_t width) const;
   };
 };
