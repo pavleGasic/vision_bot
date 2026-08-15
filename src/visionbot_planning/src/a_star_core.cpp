@@ -3,6 +3,12 @@
 
 namespace visionbot_planning
 {
+  static constexpr int8_t CELL_OCCUPIED = 99;
+  static constexpr int8_t CELL_UNKNOWN = -1;
+
+  static constexpr int8_t VISITED_CELL_COLOR = -106;
+
+
   uint32_t AStarCore::node_to_index(const GridNode & node, uint32_t width) const
   {
     return static_cast<uint32_t>(node.y) * width + static_cast<uint32_t>(node.x);
@@ -17,6 +23,12 @@ namespace visionbot_planning
   double AStarCore::calculate_manhattan(const GridNode & node, const GridNode & goal) const
   {
     return std::abs(node.x - goal.x) + std::abs(node.y - goal.y);
+  }
+
+  double AStarCore::calculate_cell_cost(int8_t raw_cost) const
+  {
+    double normalized = raw_cost / 100.0;
+    return std::exp(obstacle_cost_scale_ * normalized) - 1.0;
   }
 
   std::vector<GridNode> AStarCore::plan(
@@ -65,7 +77,7 @@ namespace visionbot_planning
       }
 
       if (visited_visualization.size() == total_cells) {
-        visited_visualization[current_idx] = -106;
+        visited_visualization[current_idx] = VISITED_CELL_COLOR;
       }
 
       for (const auto & [dx, dy] : directions) {
@@ -76,10 +88,9 @@ namespace visionbot_planning
 
         // skip occupied cell or cells out of map
         int8_t raw_cost = grid_data[neighbor_idx];
-        if (raw_cost >= 99 || raw_cost == -1) continue;
+        if (raw_cost >= CELL_OCCUPIED || raw_cost == CELL_UNKNOWN) continue;
 
-        double cell_cost = static_cast<double>(raw_cost);
-        double temp_g = g_score[current_idx] + 1.0 + cell_cost;
+        double temp_g = g_score[current_idx] + 1.0 + calculate_cell_cost(raw_cost);
 
         if (temp_g < g_score[neighbor_idx]) {
           parent_map[neighbor_idx] = current;

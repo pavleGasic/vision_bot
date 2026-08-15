@@ -34,6 +34,8 @@ namespace visionbot_planning
   {
     public:
       AStarCore() = default;
+      explicit AStarCore(double obstacle_cost_scale)
+        : obstacle_cost_scale_(obstacle_cost_scale) {}
 
       std::vector<GridNode> plan(
         const std::vector<int8_t> & grid_data,
@@ -48,6 +50,8 @@ namespace visionbot_planning
       uint32_t node_to_index(const GridNode & node, uint32_t width) const;
 
     private:
+      double obstacle_cost_scale_{10.0};
       double calculate_manhattan(const GridNode & node, const GridNode & goal) const;
+      double calculate_cell_cost(int8_t raw_cost) const;
   };
 };
