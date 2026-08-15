@@ -363,8 +363,7 @@
   </gazebo>
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>
-        /home/gasa14/Workspaces/dev_ws/install/vision_bot/share/vision_bot/config/controllers.yaml</parameters>
+      <parameters>$(find visionbot_control)/config/controllers.yaml</parameters>
     </plugin>
     <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>

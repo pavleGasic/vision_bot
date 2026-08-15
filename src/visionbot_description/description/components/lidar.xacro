@@ -12,9 +12,9 @@
       <material name="black" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin rpy="0 0 0" xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://visionbot_description/description/meshes/laser_link.stl" />
+        <cylinder length="0.03" radius="0.03" />
       </geometry>
     </collision>
     <xacro:inertial_lidar />
