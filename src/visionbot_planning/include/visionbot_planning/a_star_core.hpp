@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <cstdint>
 
+#include "nav2_costmap_2d/costmap_2d_ros.hpp"
+
 namespace visionbot_planning
 {
   struct GridNode
@@ -38,12 +40,9 @@ namespace visionbot_planning
         : obstacle_cost_scale_(obstacle_cost_scale) {}
 
       std::vector<GridNode> plan(
-        const std::vector<int8_t> & grid_data,
-        uint32_t width,
-        uint32_t height,
+        nav2_costmap_2d::Costmap2D & costmap,
         const GridNode & start,
-        const GridNode & goal,
-        std::vector<int8_t> & visited_visualization
+        const GridNode & goal
       );
 
     private:

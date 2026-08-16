@@ -3,9 +3,8 @@
 
 namespace visionbot_planning
 {
-  static constexpr int8_t CELL_OCCUPIED = 99;
+  static constexpr int8_t CELL_OCCUPIED = 100;
   static constexpr int8_t CELL_UNKNOWN = -1;
-  static constexpr int8_t VISITED_CELL_COLOR = -106;
   static constexpr double MAX_OCCUPANCY_COST = 100;
 
   uint32_t AStarCore::nodeToIndex(const GridNode & node, uint32_t width) const
@@ -31,14 +30,13 @@ namespace visionbot_planning
   }
 
   std::vector<GridNode> AStarCore::plan(
-    const std::vector<int8_t> & grid_data,
-    uint32_t width,
-    uint32_t height,
+    nav2_costmap_2d::Costmap2D & costmap,
     const GridNode & start,
-    const GridNode & goal,
-    std::vector<int8_t> & visited_visualization)
+    const GridNode & goal)
   {
     std::vector<GridNode> path;
+    const auto width = costmap.getSizeInCellsX();
+    const auto height = costmap.getSizeInCellsY();
 
     if(!isInBounds(start, width, height) || !isInBounds(goal, width, height)){
       return path;
@@ -49,6 +47,7 @@ namespace visionbot_planning
     uint32_t goal_idx = nodeToIndex(goal, width);
 
     std::priority_queue<GridNode, std::vector<GridNode>, std::greater<GridNode>> open_set;
+    std::vector<bool> closed(total_cells, false);
     std::vector<double> g_score(total_cells, std::numeric_limits<double>::infinity());
     std::unordered_map<uint32_t, GridNode> parent_map;
 
@@ -70,13 +69,13 @@ namespace visionbot_planning
       open_set.pop();
 
       uint32_t current_idx = nodeToIndex(current, width);
+
+      if (closed[current_idx]) continue;
+      closed[current_idx] = true;
+
       if (current_idx == goal_idx) {
         goal_reached = true;
         break;
-      }
-
-      if (visited_visualization.size() == total_cells) {
-        visited_visualization[current_idx] = VISITED_CELL_COLOR;
       }
 
       for (const auto & [dx, dy] : directions) {
@@ -86,8 +85,8 @@ namespace visionbot_planning
         uint32_t neighbor_idx = nodeToIndex(neighbor, width);
 
         // skip occupied cell or cells out of map
-        int8_t raw_cost = grid_data[neighbor_idx];
-        if (raw_cost >= CELL_OCCUPIED || raw_cost == CELL_UNKNOWN) continue;
+        unsigned char raw_cost = costmap.getCost(neighbor_idx);
+        if (raw_cost >= nav2_costmap_2d::LETHAL_OBSTACLE || raw_cost == nav2_costmap_2d::NO_INFORMATION) continue;
 
         double temp_g = g_score[current_idx] + 1.0 + calculateCellCost(raw_cost);
 
