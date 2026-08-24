@@ -14,9 +14,9 @@ namespace visionbot_motion
   struct PurePursuitParams
   {
     double lookahead_dist{0.5};
-    double max_linear_vel{0.3};
+    double max_linear_vel{0.5};
     double min_linear_vel{0.05};
-    double max_angular_vel{1.0};
+    double max_angular_vel{0.4};
     double k_curvature{0.5};
   };
 
@@ -36,5 +36,5 @@ namespace visionbot_motion
     private:
       PurePursuitParams params_;
   };
-  
+
 };

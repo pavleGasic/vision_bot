@@ -20,7 +20,7 @@ namespace visionbot_motion
       void clearPath();
       [[nodiscard]] bool hasPath() const;
       [[nodiscard]] std::string getFrameId() const;
-      [[nodiscard]] std::vector<geometry_msgs::msg::PoseStamped, std::allocator<geometry_msgs::msg::PoseStamped>> getPoses() const;
+      [[nodiscard]] std::vector<geometry_msgs::msg::PoseStamped> & getPoses();
 
       [[nodiscard]] std::optional<geometry_msgs::msg::PoseStamped> getLookaheadPoint(
         const geometry_msgs::msg::PoseStamped & robot_pose, double lookahead_distance);

@@ -26,11 +26,11 @@ namespace visionbot_motion
     nav2_util::declare_parameter_if_not_declared(
       node, plugin_name_ + ".lookahead_dist", rclcpp::ParameterValue(0.5));
     nav2_util::declare_parameter_if_not_declared(
-      node, plugin_name_ + ".max_linear_vel", rclcpp::ParameterValue(0.7));
+      node, plugin_name_ + ".max_linear_vel", rclcpp::ParameterValue(0.5));
     nav2_util::declare_parameter_if_not_declared(
       node, plugin_name_ + ".min_linear_vel", rclcpp::ParameterValue(0.05));
     nav2_util::declare_parameter_if_not_declared(
-      node, plugin_name_ + ".max_angular_vel", rclcpp::ParameterValue(0.5));
+      node, plugin_name_ + ".max_angular_vel", rclcpp::ParameterValue(0.4));
     nav2_util::declare_parameter_if_not_declared(
       node, plugin_name_ + ".k_curvature", rclcpp::ParameterValue(0.5));
 

@@ -30,7 +30,7 @@ namespace visionbot_motion
     return path_.header.frame_id;
   }
 
-  std::vector<geometry_msgs::msg::PoseStamped, std::allocator<geometry_msgs::msg::PoseStamped>> PathHandler::getPoses() const
+  std::vector<geometry_msgs::msg::PoseStamped> & PathHandler::getPoses()
   {
     return path_.poses;
   }
@@ -43,7 +43,8 @@ namespace visionbot_motion
     }
 
     double min_dist = std::numeric_limits<double>::max();
-    for (size_t i = last_closest_index_; i < path_.poses.size(); ++i) {
+    const size_t search_end = std::min(last_closest_index_ + 20, path_.poses.size());
+    for (size_t i = last_closest_index_; i < search_end; ++i) {
       double dist = calculateDistance(robot_pose.pose, path_.poses[i].pose);
       if (dist < min_dist) {
         min_dist = dist;

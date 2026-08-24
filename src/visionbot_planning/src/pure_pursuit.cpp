@@ -33,7 +33,11 @@ namespace visionbot_motion
     adaptive_linear_vel = std::clamp(adaptive_linear_vel, params_.min_linear_vel, params_.max_linear_vel);
 
     double angular_vel = adaptive_linear_vel * curvature;
-    angular_vel = std::clamp(angular_vel, -params_.max_angular_vel, params_.max_angular_vel);
+    if (std::abs(angular_vel) > params_.max_angular_vel) {
+      const double scale = params_.max_angular_vel / std::abs(angular_vel);
+      angular_vel = std::copysign(params_.max_angular_vel, angular_vel);
+      adaptive_linear_vel = std::clamp(adaptive_linear_vel * scale, params_.min_linear_vel, params_.max_linear_vel);
+    }
 
     return {adaptive_linear_vel, angular_vel};
   }
