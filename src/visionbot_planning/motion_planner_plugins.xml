@@ -1,0 +1,5 @@
+<class_libraries>
+  <library path="motion_planner_node">
+    <class type="visionbot_motion::MotionPlannerNode" base_class_type="nav2_core::Controller" />
+  </library>
+</class_libraries>

@@ -9,12 +9,17 @@ namespace visionbot_motion
     last_closest_index_ = 0;
   }
 
+  void PathHandler::setFrameId(const std::string frame_id)
+  {
+    path_.header.frame_id = frame_id;
+  }
+
   void PathHandler::clearPath()
   {
     path_.poses.clear();
     last_closest_index_ = 0;
   }
-  
+
   bool PathHandler::hasPath() const
   {
     return !path_.poses.empty();
@@ -25,14 +30,9 @@ namespace visionbot_motion
     return path_.header.frame_id;
   }
 
-  bool PathHandler::isGoalReached(const geometry_msgs::msg::PoseStamped & robot_pose, double goal_tolerance) const
+  std::vector<geometry_msgs::msg::PoseStamped, std::allocator<geometry_msgs::msg::PoseStamped>> PathHandler::getPoses() const
   {
-    if (!hasPath()) {
-      return false;
-    }
-
-    const auto & goal_pose = path_.poses.back().pose;
-    return calculateDistance(robot_pose.pose, goal_pose) <= goal_tolerance;
+    return path_.poses;
   }
 
   std::optional<geometry_msgs::msg::PoseStamped> PathHandler::getLookaheadPoint(

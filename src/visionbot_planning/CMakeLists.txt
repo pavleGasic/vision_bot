@@ -20,17 +20,40 @@ find_package(pluginlib REQUIRED)
 
 include_directories(include)
 
-add_library(a_star_planner_node SHARED src/a_star_planner_node.cpp src/a_star_core.cpp)
-ament_target_dependencies(a_star_planner_node rclcpp rclcpp_action nav_msgs geometry_msgs tf2_ros nav2_core nav2_costmap_2d nav2_util pluginlib nav2_msgs)
+add_library(a_star_planner_node SHARED
+  src/a_star_planner_node.cpp
+  src/a_star_core.cpp)
+ament_target_dependencies(a_star_planner_node
+  rclcpp
+  rclcpp_action
+  nav_msgs
+  geometry_msgs
+  tf2_ros
+  nav2_core
+  nav2_costmap_2d
+  nav2_util
+  pluginlib
+  nav2_msgs)
 
 pluginlib_export_plugin_description_file(nav2_core global_planner_plugins.xml)
 
-add_executable(motion_planner
+add_library(motion_planner_node SHARED
   src/motion_planner_node.cpp
   src/pure_pursuit.cpp
   src/path_handler.cpp
 )
-ament_target_dependencies(motion_planner rclcpp nav_msgs geometry_msgs tf2_ros tf2_geometry_msgs)
+ament_target_dependencies(motion_planner_node
+  rclcpp
+  nav_msgs
+  geometry_msgs
+  tf2_ros
+  tf2_geometry_msgs
+  nav2_core
+  nav2_costmap_2d
+  nav2_util
+  pluginlib)
+
+pluginlib_export_plugin_description_file(nav2_core motion_planner_plugins.xml)
 
 install(
   DIRECTORY include
@@ -38,18 +61,18 @@ install(
 )
 
 install(TARGETS
-  motion_planner
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-install(TARGETS
   a_star_planner_node
+  motion_planner_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 install(FILES global_planner_plugins.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(FILES motion_planner_plugins.xml
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -62,4 +85,5 @@ endif()
 
 ament_export_include_directories(include)
 ament_export_dependencies(rclcpp nav_msgs geometry_msgs tf2_ros tf2_geometry_msgs nav2_core nav2_costmap_2d nav2_util pluginlib)
+ament_export_libraries(a_star_planner_node motion_planner_node)
 ament_package()

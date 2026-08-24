@@ -16,11 +16,11 @@ namespace visionbot_motion
       PathHandler() = default;
 
       void setPath(const nav_msgs::msg::Path & path);
+      void setFrameId(const std::string frame_id);
       void clearPath();
       [[nodiscard]] bool hasPath() const;
       [[nodiscard]] std::string getFrameId() const;
-
-      [[nodiscard]] bool isGoalReached(const geometry_msgs::msg::PoseStamped & robot_pose, double goal_tolerance) const;
+      [[nodiscard]] std::vector<geometry_msgs::msg::PoseStamped, std::allocator<geometry_msgs::msg::PoseStamped>> getPoses() const;
 
       [[nodiscard]] std::optional<geometry_msgs::msg::PoseStamped> getLookaheadPoint(
         const geometry_msgs::msg::PoseStamped & robot_pose, double lookahead_distance);

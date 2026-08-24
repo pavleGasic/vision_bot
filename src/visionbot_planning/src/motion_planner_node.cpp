@@ -3,124 +3,136 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
+#include "nav2_util/node_utils.hpp"
+
 namespace visionbot_motion
 {
-  MotionPlannerNode::MotionPlannerNode(const rclcpp::NodeOptions & options)
-    : Node("motion_planner_node", options)
+  void MotionPlannerNode::configure(
+    const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent,
+    std::string name,
+    std::shared_ptr<tf2_ros::Buffer> tf,
+    std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros)
   {
-    PurePursuitParams init_params;
-    init_params.lookahead_dist = declare_parameter<double>("lookahead_distance", 0.5);
-    init_params.max_linear_vel = declare_parameter<double>("max_linear_velocity", 0.7);
-    init_params.min_linear_vel = declare_parameter<double>("min_linear_velocity", 0.05);
-    init_params.max_angular_vel = declare_parameter<double>("max_angular_velocity", 0.7);
-    init_params.k_curvature = declare_parameter<double>("k_curvature", 0.5);
+    lifecycle_node_ = parent;
+    auto node = lifecycle_node_.lock();
+    costmap_ros_ = costmap_ros;
+    tf_ = tf;
+    plugin_name_ = name;
+    logger_ = node->get_logger();
+    clock_ = node->get_clock();
 
-    robot_base_frame_ = declare_parameter<std::string>("robot_base_frame", "base_link");
-    goal_tolerance_ = declare_parameter<double>("goal_tolerance", 0.1);
+    PurePursuitParams controller_params_;
 
-    controller_.updateParams(init_params);
+    nav2_util::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".lookahead_dist", rclcpp::ParameterValue(0.5));
+    nav2_util::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".max_linear_vel", rclcpp::ParameterValue(0.7));
+    nav2_util::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".min_linear_vel", rclcpp::ParameterValue(0.05));
+    nav2_util::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".max_angular_vel", rclcpp::ParameterValue(0.5));
+    nav2_util::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".k_curvature", rclcpp::ParameterValue(0.5));
 
-    path_sub_ = create_subscription<nav_msgs::msg::Path>(
-      "/astar/path", 10, std::bind(&MotionPlannerNode::pathCallback, this, std::placeholders::_1));
-    cmd_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-    target_pose_pub_ = create_publisher<geometry_msgs::msg::PoseStamped>("/pure_pursuit/target_pose", 10);
+    node->get_parameter(plugin_name_ + ".lookahead_dist", controller_params_.lookahead_dist);
+    node->get_parameter(plugin_name_ + ".max_linear_vel", controller_params_.max_linear_vel);
+    node->get_parameter(plugin_name_ + ".min_linear_vel", controller_params_.min_linear_vel);
+    node->get_parameter(plugin_name_ + ".max_angular_vel", controller_params_.max_angular_vel);
+    node->get_parameter(plugin_name_ + ".k_curvature", controller_params_.k_curvature);
 
-    tf_buffer_ = std::make_shared<tf2_ros::Buffer>(get_clock());
-    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+    controller_.updateParams(controller_params_);
 
-    control_loop_timer_ = create_wall_timer(
-      std::chrono::milliseconds(100), std::bind(&MotionPlannerNode::controlLoop, this));
+    target_pose_pub_ = node->create_publisher<geometry_msgs::msg::PoseStamped>("/pure_pursuit/target_pose", 10);
   }
 
-  std::optional<geometry_msgs::msg::TransformStamped> MotionPlannerNode::lookupTransform(
-    const tf2_ros::Buffer & tf_buffer,
-    const std::string & target_frame,
-    const std::string & source_frame
-  )
+  void MotionPlannerNode::cleanup()
   {
-    try {
-      return tf_buffer.lookupTransform(target_frame, source_frame, tf2::TimePointZero);
-    } catch (const tf2::TransformException & ex) {
-      RCLCPP_ERROR(get_logger(), "TF lookup failed [%s -> %s]: %s",
-        target_frame.c_str(), source_frame.c_str(), ex.what());
-      return std::nullopt;
-    }
+    RCLCPP_INFO(logger_, "Cleaning up plugin MotionPlannerNode");
+    target_pose_pub_.reset();
+    path_handler_.clearPath();
   }
 
-  void MotionPlannerNode::pathCallback(const nav_msgs::msg::Path::SharedPtr path)
+  void MotionPlannerNode::activate()
   {
-    if (path->poses.empty()) {
-      RCLCPP_WARN(get_logger(), "Received path is empty!");
-      return;
-    }
-
-    path_handler_.setPath(*path);
+    RCLCPP_INFO(logger_, "Activating plugin MotionPlannerNode");
   }
 
-  void MotionPlannerNode::controlLoop()
+  void MotionPlannerNode::deactivate()
   {
+    RCLCPP_INFO(logger_, "Deactivating plugin MotionPlannerNode");
+  }
+
+  geometry_msgs::msg::TwistStamped MotionPlannerNode::computeVelocityCommands(
+    const geometry_msgs::msg::PoseStamped & robot_pose,
+    const geometry_msgs::msg::Twist &,
+    nav2_core::GoalChecker *)
+  {
+    geometry_msgs::msg::TwistStamped cmd_vel;
+    cmd_vel.header.frame_id = robot_pose.header.frame_id;
+
     if (!path_handler_.hasPath()) {
-      return;
+      return cmd_vel;
     }
 
-    geometry_msgs::msg::PoseStamped robot_pose;
-
-    const auto tf = lookupTransform(*tf_buffer_, path_handler_.getFrameId(), robot_base_frame_);
-    if (!tf.has_value()) return;
-    robot_pose.header = tf.value().header;
-    robot_pose.pose.position.x = tf.value().transform.translation.x;
-    robot_pose.pose.position.y = tf.value().transform.translation.y;
-    robot_pose.pose.position.z = tf.value().transform.translation.z;
-    robot_pose.pose.orientation = tf.value().transform.rotation;
-
-
-    if (path_handler_.isGoalReached(robot_pose, goal_tolerance_)) {
-      RCLCPP_INFO(get_logger(), "Target goal reached successfully.");
-      stopRobot();
-      path_handler_.clearPath();
-      return;
+    if (path_handler_.getFrameId() != robot_pose.header.frame_id) {
+      const auto tf_to_path = lookupTransform(*tf_, robot_pose.header.frame_id, path_handler_.getFrameId());
+      if (!tf_to_path.has_value()) {
+        return cmd_vel;
+      }
+      for (auto & pose : path_handler_.getPoses()) {
+        tf2::doTransform(pose, pose, tf_to_path.value());
+      }
+      path_handler_.setFrameId(robot_pose.header.frame_id);
     }
+
 
     auto target_pose_opt = path_handler_.getLookaheadPoint(robot_pose, controller_.getParams().lookahead_dist);
 
     if (!target_pose_opt.has_value()) {
-      RCLCPP_WARN(get_logger(), "Failed to locate target lookahead pose.");
-      stopRobot();
-      return;
+      RCLCPP_WARN(logger_, "Failed to locate target lookahead pose.");
+      return cmd_vel;
     }
 
     auto target_pose = target_pose_opt.value();
     target_pose_pub_->publish(target_pose);
 
-    geometry_msgs::msg::PoseStamped target_in_robot_frame;
-    const auto tf_to_robot = lookupTransform(*tf_buffer_, robot_base_frame_, target_pose.header.frame_id);
+    const auto tf_to_robot = lookupTransform(*tf_, robot_base_frame_, target_pose.header.frame_id);
     if (!tf_to_robot.has_value()) {
-      stopRobot();
-      return;
+      return cmd_vel;
     }
+    geometry_msgs::msg::PoseStamped target_in_robot_frame;
     tf2::doTransform(target_pose, target_in_robot_frame, tf_to_robot.value());
 
     auto cmd_vel_data = controller_.computeVelocity(
       target_in_robot_frame.pose.position.x, target_in_robot_frame.pose.position.y);
 
-    geometry_msgs::msg::Twist cmd_msg;
-    cmd_msg.linear.x = cmd_vel_data.linear;
-    cmd_msg.angular.z = cmd_vel_data.angular;
-    cmd_pub_->publish(cmd_msg);
+    cmd_vel.twist.linear.x = cmd_vel_data.linear;
+    cmd_vel.twist.angular.z = cmd_vel_data.angular;
+
+    return cmd_vel;
   }
 
-  void MotionPlannerNode::stopRobot()
+  void MotionPlannerNode::setPlan(const nav_msgs::msg::Path & path)
   {
-    geometry_msgs::msg::Twist stop_cmd;
-    cmd_pub_->publish(stop_cmd);
+    path_handler_.setPath(path);
+  }
+
+  void MotionPlannerNode::setSpeedLimit(const double &, const bool &) {}
+
+  std::optional<geometry_msgs::msg::TransformStamped> MotionPlannerNode::lookupTransform(
+    const tf2_ros::Buffer & tf_buffer,
+    const std::string & target_frame,
+    const std::string & source_frame) const
+  {
+    try {
+      return tf_buffer.lookupTransform(target_frame, source_frame, tf2::TimePointZero);
+    } catch (const tf2::TransformException & ex) {
+      RCLCPP_ERROR(logger_, "TF lookup failed [%s -> %s]: %s",
+        target_frame.c_str(), source_frame.c_str(), ex.what());
+      return std::nullopt;
+    }
   }
 }
 
-int main(int argc, char **argv)
-{
-  rclcpp::init(argc, argv);
-  auto node = std::make_shared<visionbot_motion::MotionPlannerNode>();
-  rclcpp::spin(node);
-  rclcpp::shutdown();
-  return 0;
-}
+#include "pluginlib/class_list_macros.hpp"
+PLUGINLIB_EXPORT_CLASS(visionbot_motion::MotionPlannerNode, nav2_core::Controller)
