@@ -93,9 +93,9 @@ def generate_launch_description():
   rviz = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(
-        get_package_share_directory('visionbot_description'),
-        'launch',
-        'rviz.launch.py'
+        get_package_share_directory('nav2_bringup'),
+        'rviz',
+        'nav2_default_view.rviz'
       )
     )
   )
