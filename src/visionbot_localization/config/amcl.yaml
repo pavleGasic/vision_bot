@@ -16,9 +16,9 @@ amcl:
       z: 0.0
       yaw: 0.0
 
-    robot_model_mode: "nav2_amcl_DifferentialMotionModel"
-    alpha1: 0.2
-    alpha2: 0.2
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    alpha1: 0.5
+    alpha2: 0.4
     alpha3: 0.2
     alpha4: 0.2
 
@@ -30,7 +30,7 @@ amcl:
     lambda_short: 0.1
     laser_likelihood_max_dist: 2.0
     laser_max_range: 100.0
-    laser_min_range: -1.0
+    laser_min_range: 0.1
     max_beams: 60
     pf_err: 0.95
     pf_z: 0.99
@@ -41,9 +41,9 @@ amcl:
     z_short: 0.05
 
     resample_interval: 1
-    max_particles: 2000
+    max_particles: 2500
     min_particles: 500
-    recovery_alpha_fast: 0.0
-    recovery_alpha_slow: 0.0
-    update_min_a: 0.2
-    update_min_d: 0.25
+    recovery_alpha_fast: 0.1
+    recovery_alpha_slow: 0.001
+    update_min_a: 0.1
+    update_min_d: 0.08

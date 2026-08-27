@@ -20,6 +20,7 @@ namespace visionbot_motion
     plugin_name_ = name;
     logger_ = node->get_logger();
     clock_ = node->get_clock();
+    robot_base_frame_ = costmap_ros_->getBaseFrameID();
 
     PurePursuitParams controller_params_;
 
@@ -69,25 +70,13 @@ namespace visionbot_motion
   {
     geometry_msgs::msg::TwistStamped cmd_vel;
     cmd_vel.header.frame_id = robot_pose.header.frame_id;
+    cmd_vel.header.stamp = clock_->now();
 
     if (!path_handler_.hasPath()) {
       return cmd_vel;
     }
 
-    if (path_handler_.getFrameId() != robot_pose.header.frame_id) {
-      const auto tf_to_path = lookupTransform(*tf_, robot_pose.header.frame_id, path_handler_.getFrameId());
-      if (!tf_to_path.has_value()) {
-        return cmd_vel;
-      }
-      for (auto & pose : path_handler_.getPoses()) {
-        tf2::doTransform(pose, pose, tf_to_path.value());
-      }
-      path_handler_.setFrameId(robot_pose.header.frame_id);
-    }
-
-
     auto target_pose_opt = path_handler_.getLookaheadPoint(robot_pose, controller_.getParams().lookahead_dist);
-
     if (!target_pose_opt.has_value()) {
       RCLCPP_WARN(logger_, "Failed to locate target lookahead pose.");
       return cmd_vel;
@@ -95,11 +84,11 @@ namespace visionbot_motion
 
     auto target_pose = target_pose_opt.value();
     target_pose_pub_->publish(target_pose);
-
     const auto tf_to_robot = lookupTransform(*tf_, robot_base_frame_, target_pose.header.frame_id);
     if (!tf_to_robot.has_value()) {
       return cmd_vel;
     }
+
     geometry_msgs::msg::PoseStamped target_in_robot_frame;
     tf2::doTransform(target_pose, target_in_robot_frame, tf_to_robot.value());
 

@@ -27,6 +27,16 @@ namespace visionbot_motion
 
   CommandVelocity PurePursuit::computeVelocity(double target_x, double target_y) const
   {
+    // if angle is large, turn around in place first
+    double angular_error = std::atan2(target_y, target_x);
+
+    if (std::abs(angular_error) > angular_error_threshold_) {
+      double angular_vel = 0.5 * angular_error;
+      double angular_vel_clamped = std::clamp(angular_vel, -params_.max_angular_vel, params_.max_angular_vel);
+
+      return {0.0, angular_vel_clamped};
+    }
+
     const double curvature = calculateCurvature(target_x, target_y);
 
     double adaptive_linear_vel = params_.max_linear_vel / (1.0 + params_.k_curvature * std::abs(curvature));

@@ -9,11 +9,6 @@ namespace visionbot_motion
     last_closest_index_ = 0;
   }
 
-  void PathHandler::setFrameId(const std::string frame_id)
-  {
-    path_.header.frame_id = frame_id;
-  }
-
   void PathHandler::clearPath()
   {
     path_.poses.clear();
@@ -23,11 +18,6 @@ namespace visionbot_motion
   bool PathHandler::hasPath() const
   {
     return !path_.poses.empty();
-  }
-
-  std::string PathHandler::getFrameId() const
-  {
-    return path_.header.frame_id;
   }
 
   std::vector<geometry_msgs::msg::PoseStamped> & PathHandler::getPoses()
@@ -43,7 +33,7 @@ namespace visionbot_motion
     }
 
     double min_dist = std::numeric_limits<double>::max();
-    const size_t search_end = std::min(last_closest_index_ + 20, path_.poses.size());
+    const size_t search_end = std::min(last_closest_index_ + 30, path_.poses.size());
     for (size_t i = last_closest_index_; i < search_end; ++i) {
       double dist = calculateDistance(robot_pose.pose, path_.poses[i].pose);
       if (dist < min_dist) {

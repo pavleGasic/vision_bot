@@ -35,6 +35,8 @@ namespace visionbot_motion
 
     private:
       PurePursuitParams params_;
+
+      static constexpr double angular_error_threshold_ = 1; // 1rad = 60 deg
   };
 
 };

@@ -5,7 +5,7 @@ controller_manager:
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
-    
+
     diff_drive_controller:
       type: diff_drive_controller/DiffDriveController
 
@@ -20,34 +20,34 @@ diff_drive_controller:
     wheel_radius: 0.033
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
-    wheel_separation_multiplier: 1.0
+    wheel_separation_multiplier: 1.25
 
     publish_rate: 50.0
-    pose_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.01]
-    twist_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.01]
+    pose_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.2]
+    twist_covariance_diagonal: [0.001, 0.001, 1.0e-3, 1.0e-3, 1.0e-3, 0.2]
 
     base_frame_id: base_link
     publish_limit_velocity: true
     publish_wheel_data: true
     odom_frame_id: odom
-    enable_odom_tf: true
+    enable_odom_tf: false
 
     linear:
       x:
         has_velocity_limits: true
-        max_velocity: 0.7
-        min_velocity: -0.5
+        max_velocity: 0.5
+        min_velocity: -0.4
         has_acceleration_limits: true
-        max_acceleration: 0.7
+        max_acceleration: 0.5
         min_acceleration: -0.4
         has_jerk_limits: false
 
     angular:
       z:
         has_velocity_limits: true
-        max_velocity: 1.7
-        min_velocity: -1.7
+        max_velocity: 1.0
+        min_velocity: -1.0
         has_acceleration_limits: true
-        max_acceleration: 1.5
-        min_acceleration: -1.5
-        has_jerk_limits: false 
+        max_acceleration: 0.8
+        min_acceleration: -0.8
+        has_jerk_limits: false

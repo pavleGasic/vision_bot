@@ -12,31 +12,31 @@ def generate_launch_description():
     default_value='true',
     description='Use simulation (Gazebo) clock if true'
   )
-  
+
   map_name_arg = DeclareLaunchArgument(
     'map_name',
     default_value='small_house',
     description='Name of the map file to load'
   )
-  
+
   amcl_config_arg = DeclareLaunchArgument(
     'amcl_config',
     default_value=os.path.join(
-      get_package_share_directory('visionbot_navigation'),
+      get_package_share_directory('visionbot_localization'),
       'config',
       'amcl.yaml'
     )
   )
-  
+
   map_name = LaunchConfiguration('map_name')
   use_sim_time = LaunchConfiguration('use_sim_time')
   amcl_config = LaunchConfiguration('amcl_config')
-  
+
   lifecycle_nodes = ['map_server', 'amcl']
-  
+
   map_path = PathJoinSubstitution([
-    get_package_share_directory('visionbot_navigation'),
-    'maps', 
+    get_package_share_directory('visionbot_localization'),
+    'maps',
     map_name,
     'map.yaml'
   ])
@@ -51,7 +51,7 @@ def generate_launch_description():
       {'yaml_filename': map_path}
     ]
   )
-  
+
   nav2_amcl = Node(
     package='nav2_amcl',
     executable='amcl',
@@ -62,7 +62,7 @@ def generate_launch_description():
       {'use_sim_time': use_sim_time}
     ]
   )
-  
+
   nav2_lifecycle_manager = Node(
     package='nav2_lifecycle_manager',
     executable='lifecycle_manager',
@@ -74,8 +74,8 @@ def generate_launch_description():
       {'autostart': True}
     ]
   )
-  
-  
+
+
   return LaunchDescription([
     map_name_arg,
     use_sim_time_arg,

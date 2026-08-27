@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(visionbot_navigation)
+project(visionbot_localization)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -8,7 +8,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config launch behavior_tree
+  DIRECTORY config launch maps
   DESTINATION share/${PROJECT_NAME}
 )
 

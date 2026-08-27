@@ -16,10 +16,8 @@ namespace visionbot_motion
       PathHandler() = default;
 
       void setPath(const nav_msgs::msg::Path & path);
-      void setFrameId(const std::string frame_id);
       void clearPath();
       [[nodiscard]] bool hasPath() const;
-      [[nodiscard]] std::string getFrameId() const;
       [[nodiscard]] std::vector<geometry_msgs::msg::PoseStamped> & getPoses();
 
       [[nodiscard]] std::optional<geometry_msgs::msg::PoseStamped> getLookaheadPoint(

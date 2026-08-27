@@ -46,12 +46,34 @@ def generate_launch_description():
     )
   )
 
-  localization = IncludeLaunchDescription(
+  local_localization = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_localization'),
+        'launch',
+        'local_localization.launch.py'
+      )
+    ),
+    condition=UnlessCondition(use_slam)
+  )
+
+  global_localization = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_localization'),
+        'launch',
+        'global_localization.launch.py'
+      )
+    ),
+    condition=UnlessCondition(use_slam)
+  )
+
+  robot_navigation = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(
         get_package_share_directory('visionbot_navigation'),
         'launch',
-        'global_localization.launch.py'
+        'navigation.launch.py'
       )
     ),
     condition=UnlessCondition(use_slam)
@@ -83,7 +105,9 @@ def generate_launch_description():
     use_gz_gui_arg,
     gazebo,
     control,
-    localization,
+    local_localization,
+    global_localization,
+    robot_navigation,
     slam,
     rviz
   ])
