@@ -47,7 +47,7 @@
   <joint name="camera_joint" type="fixed">
     <parent link="camera_neck_link" />
     <child link="camera_link" />
-    <origin xyz="0.0075 0 ${camera_offset_z}" rpy="0 ${pi/2} 0" />
+    <origin xyz="0.0075 0 ${camera_offset_z}" rpy="0 0 0" />
   </joint>
 
   <link name="camera_link">
@@ -72,28 +72,4 @@
   </joint>
 
   <link name="camera_link_optical"></link>
-
-  <gazebo reference="camera_link">
-    <sensor name="camera" type="camera">
-      <update_rate>30</update_rate>
-      <topic>camera/image_raw</topic>
-      <camera>
-        <camera_info_topic>camera/camera_info</camera_info_topic>
-        <horizontal_fov>2.09</horizontal_fov>
-        <image>
-          <format>R8G8B8</format>
-          <width>1280</width>
-          <height>720</height>
-        </image>
-        <clip>
-          <near>0.05</near>
-          <far>20.0</far>
-        </clip>
-      </camera>
-
-      <always_on>true</always_on>
-      <visualize>true</visualize>
-    </sensor>
-  </gazebo>
-
 </robot>

@@ -90,14 +90,17 @@ def generate_launch_description():
     condition=IfCondition(use_slam)
   )
 
-  rviz = IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(
-      os.path.join(
-        get_package_share_directory('nav2_bringup'),
-        'rviz',
-        'nav2_default_view.rviz'
+  rviz = Node(
+    package="rviz2",
+    executable="rviz2",
+    arguments=["-d", os.path.join(
+        get_package_share_directory("nav2_bringup"),
+        "rviz",
+        "nav2_default_view.rviz"
       )
-    )
+    ],
+    output="screen",
+    parameters=[{"use_sim_time": True}]
   )
 
   return LaunchDescription([
