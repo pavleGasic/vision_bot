@@ -128,16 +128,16 @@
   <gazebo reference="camera_link_optical">
     <sensor name="rpi_camera_module3_wide" type="camera">
       <always_on>true</always_on>
-      <update_rate>20.0</update_rate>
+      <update_rate>10.0</update_rate>
       <visualize>true</visualize>
       <topic>/camera/image_raw</topic>
       <camera name="camera">
         <camera_info_topic>/camera/image_raw/camera_info</camera_info_topic>
         <gz_frame_id>camera_link_optical</gz_frame_id>
-        <horizontal_fov>1.21126</horizontal_fov>
+        <horizontal_fov>1.78</horizontal_fov>
         <image>
-          <width>2304</width>
-          <height>1296</height>
+          <width>853</width>
+          <height>480</height>
           <format>R8G8B8</format>
         </image>
         <distortion>

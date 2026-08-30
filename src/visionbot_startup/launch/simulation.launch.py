@@ -32,7 +32,8 @@ def generate_launch_description():
       )
     ),
     launch_arguments={
-      'use_gui': LaunchConfiguration('use_gui')
+      'use_gui': LaunchConfiguration('use_gui'),
+      'world_name': 'yolo_benchmark'
     }.items()
   )
 
@@ -53,8 +54,7 @@ def generate_launch_description():
         'launch',
         'local_localization.launch.py'
       )
-    ),
-    condition=UnlessCondition(use_slam)
+    )
   )
 
   global_localization = IncludeLaunchDescription(
@@ -65,6 +65,9 @@ def generate_launch_description():
         'global_localization.launch.py'
       )
     ),
+    launch_arguments={
+      'map_name': 'benchmark'
+    }.items(),
     condition=UnlessCondition(use_slam)
   )
 
