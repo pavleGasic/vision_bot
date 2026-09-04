@@ -1,0 +1,5 @@
+yolo_detector:
+  ros__parameters:
+    model_path: "yolov8n.pt"
+    confidence_threshold: 0.6
+    input_size: 640
