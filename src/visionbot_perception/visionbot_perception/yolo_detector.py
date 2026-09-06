@@ -1,10 +1,12 @@
 import time
 
+import cv2
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CompressedImage
 from std_msgs.msg import Float32
 from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithPose
 
@@ -34,6 +36,7 @@ class YoloDetector(Node):
     self.bridge = CvBridge()
 
     self.pub_detections = self.create_publisher(Detection2DArray, '/detections', 10)
+    self.pub_image = self.create_publisher(CompressedImage, '/detections/image/compressed', 10)
     self.pub_latency = self.create_publisher(Float32, '/inference_latency_ms', 10)
 
     self.create_subscription(Image, '/camera/image_raw', self._image_callback, QOS_SENSOR)
@@ -55,12 +58,24 @@ class YoloDetector(Node):
     results = self.model(frame, imgsz=self.input_size, conf=self.conf_threshold, verbose=False)
     inference_ms = (time.perf_counter() - t0) * 1000.0
 
+    annotated_frame = results[0].plot()
+    image_msg = self._build_image_msg(annotated_frame, msg.header)
+    self.pub_image.publish(image_msg)
+
     detections = self._build_detections(results[0], msg.header)
     self.pub_detections.publish(detections)
 
     latency_msg = Float32()
     latency_msg.data = float(inference_ms)
     self.pub_latency.publish(latency_msg)
+
+  def _build_image_msg(self, frame, header) -> CompressedImage:
+    _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+    msg = CompressedImage()
+    msg.header = header
+    msg.format = "jpeg"
+    msg.data = buffer.tobytes()
+    return msg
 
   def _build_detections(self, result, header) -> Detection2DArray:
     msg = Detection2DArray()
@@ -92,5 +107,5 @@ def main(args=None):
   try:
     rclpy.spin(node)
   finally:
-    node.destroy_node(node)
+    node.destroy_node()
     rclpy.shutdown()

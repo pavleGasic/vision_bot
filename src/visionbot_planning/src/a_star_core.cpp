@@ -1,5 +1,4 @@
 #include "visionbot_planning/a_star_core.hpp"
-#include "rclcpp/rclcpp.hpp"
 
 namespace visionbot_planning
 {

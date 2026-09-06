@@ -78,3 +78,13 @@ pip-wheel-metadata/
 
 *.world~
 *.sdf~
+
+############################
+# YOLO
+############################
+
+yolo_models/
+*.pt
+*.onnx
+*.engine
+models/

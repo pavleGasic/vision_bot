@@ -1,4 +1,4 @@
-image: benchmark.pgm
+image: map.pgm
 mode: trinary
 resolution: 0.050
 origin: [-9.337, -5.622, 0]
