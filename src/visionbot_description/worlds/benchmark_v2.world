@@ -63,7 +63,7 @@
 
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>5.5645e-06 2.28758e-05 -4.23884e-05</magnetic_field>
-    <atmosphere type='adiabatic'/>
+    <atmosphere type='adiabatic' />
 
     <!-- ===========================================================
          RASVETA
@@ -131,10 +131,18 @@
       <pose>8.0 2.5 -0.02 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>16.0 5.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.0 5.0 0.04</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>16.0 5.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.0 5.0 0.04</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.78 0.78 0.76 1</ambient>
             <diffuse>0.86 0.86 0.84 1</diffuse>
@@ -152,10 +160,18 @@
       <pose>11.0 8.5 -0.02 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>10.0 7.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>10.0 7.0 0.04</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>10.0 7.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>10.0 7.0 0.04</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.35 0.22 0.10 1</ambient>
             <diffuse>0.50 0.32 0.14 1</diffuse>
@@ -173,10 +189,18 @@
       <pose>3.0 8.5 -0.02 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>6.0 7.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.0 7.0 0.04</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>6.0 7.0 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.0 7.0 0.04</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.62 0.55 0.43 1</ambient>
             <diffuse>0.72 0.64 0.50 1</diffuse>
@@ -196,7 +220,11 @@
       <pose>8.0 6.0 2.82 0 0 0</pose>
       <link name='link'>
         <visual name='vis'>
-          <geometry><box><size>16.1 12.1 0.04</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.1 12.1 0.04</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.96 0.96 0.95 1</ambient>
             <diffuse>0.96 0.96 0.95 1</diffuse>
@@ -219,10 +247,18 @@
       <pose>8.0 -0.075 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>16.3 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.3 0.15 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>16.3 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.3 0.15 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.91 0.89 0.84 1</ambient>
             <diffuse>0.93 0.91 0.86 1</diffuse>
@@ -239,10 +275,18 @@
       <pose>8.0 12.075 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>16.3 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.3 0.15 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>16.3 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>16.3 0.15 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.91 0.89 0.84 1</ambient>
             <diffuse>0.93 0.91 0.86 1</diffuse>
@@ -259,10 +303,18 @@
       <pose>-0.075 6.0 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>0.15 12.3 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 12.3 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>0.15 12.3 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 12.3 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.91 0.89 0.84 1</ambient>
             <diffuse>0.93 0.91 0.86 1</diffuse>
@@ -279,10 +331,18 @@
       <pose>16.075 6.0 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>0.15 12.3 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 12.3 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>0.15 12.3 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 12.3 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.91 0.89 0.84 1</ambient>
             <diffuse>0.93 0.91 0.86 1</diffuse>
@@ -309,10 +369,18 @@
       <pose>3.25 5.0 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>6.5 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.5 0.15 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>6.5 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.5 0.15 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.88 0.88 0.86 1</ambient>
             <diffuse>0.90 0.90 0.88 1</diffuse>
@@ -328,10 +396,18 @@
       <pose>12.75 5.0 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>6.5 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.5 0.15 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>6.5 0.15 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>6.5 0.15 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.88 0.88 0.86 1</ambient>
             <diffuse>0.90 0.90 0.88 1</diffuse>
@@ -353,10 +429,18 @@
       <pose>6.0 5.75 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>0.15 1.5 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 1.5 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>0.15 1.5 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 1.5 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.88 0.88 0.86 1</ambient>
             <diffuse>0.90 0.90 0.88 1</diffuse>
@@ -372,10 +456,18 @@
       <pose>6.0 10.25 1.4 0 0 0</pose>
       <link name='link'>
         <collision name='col'>
-          <geometry><box><size>0.15 3.5 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 3.5 2.8</size>
+            </box>
+          </geometry>
         </collision>
         <visual name='vis'>
-          <geometry><box><size>0.15 3.5 2.8</size></box></geometry>
+          <geometry>
+            <box>
+              <size>0.15 3.5 2.8</size>
+            </box>
+          </geometry>
           <material>
             <ambient>0.88 0.88 0.86 1</ambient>
             <diffuse>0.90 0.90 0.88 1</diffuse>
