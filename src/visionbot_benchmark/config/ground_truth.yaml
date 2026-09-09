@@ -1,0 +1,168 @@
+# Ground Truth konfiguracija za benchmark_v2.world
+# Jedini izvor istine za metrics_logger i analizu rezultata.
+#
+# Koordinatni sistem: X+ = istok, Y+ = sever, (0,0) = jugozapadni ugao prostorije
+# Prostorija: 12.0m × 10.0m
+# Robot start: (6.0, 5.0, yaw=0.0)
+#
+# max_range_m: maksimalna korisna udaljenost za detekciju ovog objekta
+#   - zavisi od veličine objekta i rezolucije kamere (853x480, FOV 102°)
+#   - konzervativna vrednost — iznad ovoga detekcija nije pouzdana ni za YOLOv8m
+#
+# is_distractor: true = svaka detekcija na ovom objektu je False Positive
+
+world:
+  name: benchmark_v2
+  sdf_path: visionbot_description/worlds/benchmark_v2.world
+  dimensions_m: [12.0, 10.0]
+  wall_thickness_m: 0.15
+  ceiling_height_m: 2.8
+
+camera:
+  fov_horizontal_deg: 102.0
+  fov_half_rad: 0.8901   # radians, = 51 degrees
+  mount_x_from_base: 0.077
+  mount_z_from_base: 0.025
+  max_range_fallback_m: 4.0
+
+robot:
+  start_pose: [6.0, 5.0, 0.0]   # x, y, yaw_rad
+
+patrol_waypoints:
+  # [x, y, yaw_rad] — yaw usmerava kameru ka ključnom objektu u tom segmentu
+  - [6.0,  5.0,  0.0000]   # START  — početna pozicija
+  - [2.0,  5.0,  1.5708]   # WP1    — vidi sofa levo, fridge gore-levo
+  - [2.0,  7.5,  0.0000]   # WP2    — refrigerator direktno ispred (~0.9m)
+  - [5.5,  8.5,  0.0000]   # WP3    — D3 polica gore, person desno
+  - [9.0,  8.5, -1.5708]   # WP4    — person direktno ispred (~1.0m)
+  - [11.0, 6.0, -1.5708]   # WP5    — chair dole, D2 kutija levo
+  - [11.0, 3.5,  3.1416]   # WP6    — chair blizu desno
+  - [9.0,  3.5,  3.1416]   # WP7    — backpack + suitcase direktno ispred
+  - [5.0,  3.5,  1.5708]   # WP8    — bottle + D1 cilindar blizu
+  - [6.0,  5.0,  0.0000]   # HOME   — povratak na start
+
+objects:
+
+  # --- COCO OBJEKTI (benchmark targets) ---
+
+  - id: person_1
+    coco_class: 0
+    coco_name: person
+    x: 10.5
+    y: 8.5
+    yaw_rad: 3.14159      # lice okrenuto ka jugu (ka ruti)
+    size_approx_m: [0.5, 0.3, 1.8]   # width, depth, height
+    max_range_m: 6.0
+    is_distractor: false
+    best_view_wp: WP4     # waypoint sa najboljim uglom pogleda
+    notes: "Vidljiv iz WP4 (~1m) i WP5 (~3.2m). Najveci objekat, anchor za recall."
+
+  - id: refrigerator_1
+    coco_class: 72
+    coco_name: refrigerator
+    x: 1.0
+    y: 8.8
+    yaw_rad: 0.0
+    size_approx_m: [0.75, 0.7, 1.8]
+    max_range_m: 6.0
+    is_distractor: false
+    best_view_wp: WP2
+    notes: "Vidljiv iz WP2 direktno ispred (~0.9m). Garantovana detekcija za sve modele."
+
+  - id: sofa_1
+    coco_class: 57
+    coco_name: couch
+    x: 0.8
+    y: 3.5
+    yaw_rad: 1.5708       # prednja strana okrenuta ka istoku (ka ruti)
+    size_approx_m: [1.8, 0.8, 0.9]
+    max_range_m: 5.0
+    is_distractor: false
+    best_view_wp: WP1
+    notes: "Vidljiv iz WP1 (~1.2m). Test confusion sa chair."
+
+  - id: chair_1
+    coco_class: 56
+    coco_name: chair
+    x: 10.5
+    y: 3.8
+    yaw_rad: 1.5708       # okrenuta ka zapadu (ka ruti)
+    size_approx_m: [0.5, 0.5, 0.9]
+    max_range_m: 4.0
+    is_distractor: false
+    best_view_wp: WP6
+    notes: "Vidljiv iz WP5 i WP6. Par sa sofa za confusion matrix analizu."
+
+  - id: suitcase_1
+    coco_class: 28
+    coco_name: suitcase
+    x: 6.5
+    y: 3.2
+    yaw_rad: 0.7854
+    size_approx_m: [0.45, 0.22, 0.65]
+    max_range_m: 3.5
+    is_distractor: false
+    best_view_wp: WP7
+    notes: "Vidljiv iz WP7 (~2.5m) istovremeno sa backpack. Disambiguation test."
+
+  - id: backpack_1
+    coco_class: 24
+    coco_name: backpack
+    x: 7.5
+    y: 3.2
+    yaw_rad: -0.7854
+    size_approx_m: [0.35, 0.20, 0.50]
+    max_range_m: 3.5
+    is_distractor: false
+    best_view_wp: WP7
+    notes: "Namerno pored suitcase (~1m razmak). Test semanticke disambiguacije."
+
+  - id: bottle_1
+    coco_class: 39
+    coco_name: bottle
+    x: 5.0
+    y: 4.2
+    yaw_rad: 0.0
+    size_approx_m: [0.08, 0.08, 0.28]
+    max_range_m: 2.5      # mali objekat — striktan range limit
+    is_distractor: false
+    best_view_wp: WP8
+    notes: "Kljucni discriminator. Razlika YOLOv8n vs YOLOv8s je najveca ovde."
+
+  # --- DISTRAKTORI (ne-COCO, svaka detekcija = FP) ---
+
+  - id: distractor_cylinder
+    coco_class: -1
+    coco_name: null
+    x: 3.5
+    y: 6.5
+    yaw_rad: 0.0
+    size_approx_m: [0.24, 0.24, 0.85]   # r=0.12, h=0.85
+    max_range_m: 2.5
+    is_distractor: true
+    looks_like_coco: 39   # bottle
+    notes: "Sivi cilindar. Testira precision za klasu bottle."
+
+  - id: distractor_box
+    coco_class: -1
+    coco_name: null
+    x: 8.5
+    y: 6.2
+    yaw_rad: 0.3927
+    size_approx_m: [0.50, 0.38, 0.34]
+    max_range_m: 3.5
+    is_distractor: true
+    looks_like_coco: 28   # suitcase
+    notes: "Smeda kutija. Testira precision za klasu suitcase."
+
+  - id: distractor_shelf
+    coco_class: -1
+    coco_name: null
+    x: 6.0
+    y: 9.65
+    yaw_rad: 0.0
+    size_approx_m: [1.20, 0.22, 0.06]
+    max_range_m: 4.0
+    is_distractor: true
+    looks_like_coco: null
+    notes: "Zidna polica. Neutralni arhitekturalni element, ne treba biti detektovan."
