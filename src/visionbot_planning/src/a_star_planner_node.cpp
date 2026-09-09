@@ -1,5 +1,4 @@
 #include "visionbot_planning/a_star_planner_node.hpp"
-#include "rmw/qos_profiles.h"
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
 namespace visionbot_planning
