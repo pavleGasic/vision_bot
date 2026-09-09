@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version='1.8'>
+  <world name='default'>
+
+    <!-- 1. OPTIMIZOVANA FIZIKA (250 Hz osvežavanje za minimalno CPU opterećenje) -->
+    <physics name="10ms" type="ignored">
+      <max_step_size>0.010</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>100</real_time_update_rate>
+    </physics>
+
+    <!-- 2. ISKLJUČENE SENKE SCENE (Drastično smanjuje GPU/CPU rad) -->
+    <scene>
+      <shadows>false</shadows>
+      <grid>true</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+    </scene>
+
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>5.5645e-06 2.28758e-05 -4.23884e-05</magnetic_field>
+    <atmosphere type='adiabatic' />
+
+    <!-- OSNOVNA STRUKTURA KUĆE -->
+    <model name='HouseWallB_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_HouseWallB_01</uri>
+      </include>
+      <pose>0 0 0 0 0 0</pose>
+    </model>
+
+    <model name='FloorB_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_FloorB_01</uri>
+      </include>
+      <pose>0 0 0 0 0 0</pose>
+    </model>
+
+    <model name='Door_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Door_01</uri>
+      </include>
+      <pose>6.001449 -5.549002 0 0 0 0</pose>
+    </model>
+
+    <!-- NAMEŠTAJ I OPREMA -->
+    <model name='ChairA_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ChairA_01</uri>
+      </include>
+      <pose>6.577577 0.855880 0 0 0 0</pose>
+    </model>
+
+    <model name='Desk_01_001'>
+      <static>true</static>
+      <include>
+        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/desk</uri>
+      </include>
+      <pose>7.023585 -2.936950 0 0 0 -3.094930</pose>
+    </model>
+
+    <model name='MonitorAndKeyboard_01_001'>
+      <static>true</static>
+      <include>
+        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/monitorandkeyboard</uri>
+      </include>
+      <pose>7.166513 -2.941029 0.551971 0 0 -0.007104</pose>
+    </model>
+
+    <model name='Backpack_01_001'>
+      <static>true</static>
+      <include>
+        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/backpack</uri>
+      </include>
+      <pose>2.819746 4.124438 0 0 0 0</pose>
+    </model>
+
+    <model name='Suitcase1H_01_001'>
+      <static>true</static>
+      <include>
+        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/suitcase1h</uri>
+      </include>
+      <pose>-0.405625 3.695660 0 0 0 -0.657017</pose>
+    </model>
+
+    <model name='Sofa_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Sofa_01</uri>
+      </include>
+      <pose>-1.056382 -4.173660 0 0 0 1.588229</pose>
+    </model>
+
+    <model name='Vase_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Vase_01</uri>
+      </include>
+      <pose>2.881054 -5.166130 0.000927 0 0 0</pose>
+    </model>
+
+    <model name='TV_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_TV_01</uri>
+      </include>
+      <pose>-6.348270 3.073940 1.366930 0 0 -1.586603</pose>
+    </model>
+
+    <model name='Refrigerator_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Refrigerator_01</uri>
+      </include>
+      <pose>-8.558545 -3.751663 0 0 0 1.497800</pose>
+    </model>
+
+    <!-- RASVETA BEZ DYNAMIČKIH SENKI -->
+    <light name='LivingRoom_CeilingLight_0' type='point'>
+      <pose>1.194300 4.155760 2.200000 0 0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <constant>0.32</constant>
+        <linear>0.01</linear>
+        <quadratic>0.03</quadratic>
+      </attenuation>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+    <light name='BedRoom_CeilingLight_0' type='point'>
+      <pose>-6.451060 -0.692040 2.000000 0 0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <constant>0.32</constant>
+        <linear>0.01</linear>
+        <quadratic>0.03</quadratic>
+      </attenuation>
+      <cast_shadows>false</cast_shadows>
+    </light>
+
+  </world>
+</sdf>

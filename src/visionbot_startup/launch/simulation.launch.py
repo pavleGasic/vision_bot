@@ -33,7 +33,7 @@ def generate_launch_description():
     ),
     launch_arguments={
       'use_gui': LaunchConfiguration('use_gui'),
-      'world_name': 'yolo_benchmark'
+      'world_name': 'yolo'
     }.items()
   )
 
