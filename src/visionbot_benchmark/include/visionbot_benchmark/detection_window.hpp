@@ -11,7 +11,7 @@ namespace visionbot_benchmark
     const GroundTruth* ground_truth{nullptr};
 
     bool active{false};
-    int8_t frames_in_zone{0};
+    int8_t frames_visible{0};
     int8_t detection_count{0};
     float max_confidence{0.0f};
     float inference_ms_sum{0.0f};

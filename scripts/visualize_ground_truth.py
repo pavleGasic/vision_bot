@@ -9,17 +9,10 @@ OBJECTS = [
     ("refrigerator",  8.70, -1.03),
     ("suitcase",     -3.37, -4.26),
     ("chair_office", -8.16, -3.62),
-    ("chair_A1",      7.12,  0.21),
-    ("chair_A2",      6.26,  0.22),
-    ("chair_A3",      6.07,  1.68),
-    ("chair_A4",      7.00,  1.67),
-    ("chair_D1",     -1.38,  4.10),
-    ("chair_D2",      0.33,  4.10),
+    ("chairs_kitchen",6.63,  0.94),
+    ("chairs_balcony",-0.53, 4.10),
     ("visitor_kid",   0.69, -1.80),
-    ("plastic_cup",   1.44, -3.15),
-    ("mini_sofa",    -4.27, -4.72),
-    ("dry_bag",      -3.75, -4.29),
-    ("monitor_kbd",  -9.14, -3.66),
+    ("chair",        -4.27, -4.72),
 ]
 
 

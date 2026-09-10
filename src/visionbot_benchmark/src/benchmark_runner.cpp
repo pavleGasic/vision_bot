@@ -12,12 +12,15 @@ namespace visionbot_benchmark
     action_client_ = rclcpp_action::create_client<nav2_msgs::action::NavigateToPose>(this, "navigate_to_pose");
 
     waypoints_ = {
-      {-0.365, 2.0, 0.0, "Waypoint 1"},
-      {4.45, 1.0, 1.57, "Waypoint 2"},
-      {2.20, -2.7, 3.14, "Waypoint 3"},
-      {-5.8, -3.4, 3.14, "Waypoint 4"},
-      {-6.32, 0.5, 3.14, "Waypoint 5"},
-      {0.0, 0.0, 0.0, "Waypoint 6"}
+      {0.0, 0.0, 0.0, "Start"},
+      {-1.5, -3.1, 0.6, "couch + visitor_kid"},
+      {3.4, 2.0, 1.57, "person_standing"},
+      {-0.5, 2.5, 1.57, "chairs_balcony"},
+      {4.8, 0.9, 0.0, "chairs_kitchen"},
+      {6.0, -1.0, 0.0, "refrigerator"},
+      {-4.5, -2.6, -1.57, "suitcase"},
+      {-6.2, -3.6, 3.14, "chair_office"},
+      {0.0, 0.0, 0.0, "Homse"},
     };
 
     timer_ = this->create_wall_timer(1s, [this]() {

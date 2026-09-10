@@ -6,7 +6,7 @@ namespace visionbot_benchmark
   {
     ground_truth = &gt;
     active = true;
-    frames_in_zone = 0;
+    frames_visible = 0;
     detection_count = 0;
     max_confidence = 0.0f;
     inference_ms_sum = 0.0f;
@@ -21,7 +21,7 @@ namespace visionbot_benchmark
 
   void DetectionWindow::recordFrame(float inference_ms)
   {
-    ++frames_in_zone;
+    ++frames_visible;
     inference_ms_sum += inference_ms;
   }
 
@@ -35,9 +35,9 @@ namespace visionbot_benchmark
 
   float DetectionWindow::avgInferenceMs() const
   {
-    if (frames_in_zone == 0) {
+    if (frames_visible == 0) {
       return 0.0f;
     }
-    return inference_ms_sum / static_cast<float>(frames_in_zone);
+    return inference_ms_sum / static_cast<float>(frames_visible);
   }
 }

@@ -17,8 +17,8 @@ namespace visionbot_benchmark
   class MetricsLogger : public rclcpp::Node
   {
     public:
-      MetricsLogger() = default;
-      ~MetricsLogger() = default;
+      MetricsLogger();
+      ~MetricsLogger();
 
     private:
       void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
@@ -32,7 +32,7 @@ namespace visionbot_benchmark
       rclcpp::Subscription<vision_msgs::msg::Detection2DArray>::SharedPtr detection_sub_;
       rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr latency_sub_;
 
-      std::array<DetectionWindow, 3> windows_;
+      std::array<DetectionWindow, 8> windows_;
       std::ofstream csv_;
       std::string model_name_;
       double robot_x_{0.0};

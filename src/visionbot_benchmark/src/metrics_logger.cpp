@@ -41,7 +41,7 @@ namespace visionbot_benchmark
       throw std::runtime_error("Failed to open CSV file: " + path);
     }
 
-    csv_ << "model_name,gt_object,detected,max_confidence,detection_count,frames_in_zone,inference_ms_avg,entry_x,entry_y\n";
+    csv_ << "model_name,gt_object_id,coco_name,detected,max_confidence,detection_count,frames_visible,inference_ms_avg,entry_x,entry_y\n";
 
     odom_sub_ = create_subscription<nav_msgs::msg::Odometry>(
       "/odometry/filtered", sensor_qos(), std::bind(&MetricsLogger::odomCallback, this, std::placeholders::_1));
@@ -80,7 +80,7 @@ namespace visionbot_benchmark
         window.recordFrame(last_inference_ms_);
         for (const auto & detection : msg->detections) {
           if (detection.results.empty()) continue;
-          if (detection.results[0].hypothesis.class_id == window.ground_truth->name) {
+          if (detection.results[0].hypothesis.class_id == window.ground_truth->coco_name) {
             window.recordDetection(detection.results[0].hypothesis.score);
           }
         }
@@ -96,11 +96,12 @@ namespace visionbot_benchmark
   void MetricsLogger::flushWindow(const DetectionWindow & window)
   {
     csv_ << model_name_ << ","
-         << window.ground_truth->name << ","
+         << window.ground_truth->id << ","
+         << window.ground_truth->coco_name << ","
          << (window.detected() ? "true" : "false") << ","
          << std::fixed << std::setprecision(4) << window.max_confidence << ","
          << static_cast<int>(window.detection_count) << ","
-         << static_cast<int>(window.frames_in_zone) << ","
+         << static_cast<int>(window.frames_visible) << ","
          << std::setprecision(2) << window.avgInferenceMs() << ","
          << window.entry_x << ","
          << window.entry_y
@@ -116,13 +117,13 @@ namespace visionbot_benchmark
       auto & window = windows_[i];
 
       const double distance = dist(robot_x, robot_y, gt.x, gt.y);
-      const bool in_zone = distance <= gt.zone_radius;
+      const bool in_zone = distance <= gt.max_range_m;
 
       if (in_zone && !window.active) {
         window.open(gt, robot_x, robot_y);
-        RCLCPP_INFO(get_logger(), "Robot entered zone of object '%s'", gt.name.c_str());
+        RCLCPP_INFO(get_logger(), "Robot entered zone of object '%s'", gt.id.c_str());
       } else if (!in_zone && window.active) {
-        RCLCPP_INFO(get_logger(), "Robot exited zone of object '%s'", gt.name.c_str());
+        RCLCPP_INFO(get_logger(), "Robot exited zone of object '%s'", gt.id.c_str());
         flushWindow(window);
         window.close();
       }

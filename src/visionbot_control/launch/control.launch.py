@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
   visionbot_control = get_package_share_directory('visionbot_control')
-    
+
   joint_state_broadcaster_spawner = Node(
     package='controller_manager',
     executable='spawner',
@@ -17,7 +17,7 @@ def generate_launch_description():
       "/controller_manager"
     ]
   )
-  
+
   diff_drive_controller_spawner = Node(
     package="controller_manager",
     executable="spawner",
@@ -27,7 +27,7 @@ def generate_launch_description():
         "/controller_manager"
     ]
   )
-  
+
   twist_mux_launch = IncludeLaunchDescription(
     os.path.join(get_package_share_directory('twist_mux'),
     'launch',
@@ -40,21 +40,21 @@ def generate_launch_description():
       'use_sim_time': 'true'
     }.items()
   )
-  
+
   heartbeat_node = Node(
     package='visionbot_control',
     executable='heartbeat',
     name='heartbeat_node',
     output="screen"
   )
-  
+
   safety_stop = Node(
     package='visionbot_control',
     executable='safety_stop',
     name='safety_stop_node',
     output="screen"
   )
-  
+
   return LaunchDescription([
     joint_state_broadcaster_spawner,
     diff_drive_controller_spawner,

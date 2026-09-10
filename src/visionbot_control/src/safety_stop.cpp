@@ -8,8 +8,8 @@ namespace visionbot_control
       prev_state_{SAFE},
       cmd_vel_multiplier_{0.25}
   {
-    danger_distance_ = 0.3;
-    warning_distance_ = 1;
+    danger_distance_ = 0.2;
+    warning_distance_ = 0.7;
     std::string scan_topic = "/scan";
     std::string safety_stop_topic = "/safety_stop";
     std::string cmd_vel_raw_topic = "/cmd_vel/raw";
