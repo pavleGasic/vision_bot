@@ -1,4 +1,4 @@
-#include "visionbot_benchmark/metrics_logger.hpp"
+#include "../include/visionbot_benchmark/metrics_logger.hpp"
 
 #include <cmath>
 #include <ctime>
@@ -12,11 +12,6 @@ namespace visionbot_benchmark
   static rclcpp::QoS sensor_qos()
   {
     return rclcpp::QoS(1).best_effort();
-  }
-
-  static double dist(double ax, double ay, double bx, double by)
-  {
-    return std::hypot(ax - bx, ay - by);
   }
 
   MetricsLogger::MetricsLogger() : Node("metrics_logger_node")
@@ -69,7 +64,13 @@ namespace visionbot_benchmark
   {
     robot_x_ = msg->pose.pose.position.x;
     robot_y_ = msg->pose.pose.position.y;
-    updateZones(robot_x_, robot_y_);
+
+    const auto & q = msg->pose.pose.orientation;
+    robot_yaw_ = std::atan2(
+      2.0 * (q.w * q.z + q.x * q.y),
+      1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+    );
+    updateVisibility(robot_x_, robot_y_, robot_yaw_);
   }
 
   void MetricsLogger::detectionCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg)
@@ -109,21 +110,31 @@ namespace visionbot_benchmark
     csv_.flush();
   }
 
-  void MetricsLogger::updateZones(double robot_x, double robot_y)
+  void MetricsLogger::updateVisibility(double robot_x, double robot_y, double robot_yaw)
   {
+    constexpr double FOV_HALF_RAD = 0.8901;
+
     for (size_t i = 0; i < GROUND_TRUTH_OBJECTS.size(); ++i)
     {
       const auto & gt = GROUND_TRUTH_OBJECTS[i];
       auto & window = windows_[i];
 
-      const double distance = dist(robot_x, robot_y, gt.x, gt.y);
-      const bool in_zone = distance <= gt.max_range_m;
+      const double dx = gt.x - robot_x;
+      const double dy = gt.y - robot_y;
+      const double distance = std::hypot(dx, dy);
+      const double angle_to_object = std::atan2(dy, dx);
 
-      if (in_zone && !window.active) {
+      double angle_diff = angle_to_object - robot_yaw;
+      while (angle_diff > M_PI) angle_diff -= 2.0 * M_PI;
+      while (angle_diff < -M_PI) angle_diff += 2.0 * M_PI;
+
+      const bool visible = distance <= gt.max_range_m && std::abs(angle_diff) <= FOV_HALF_RAD;
+
+      if (visible && !window.active) {
         window.open(gt, robot_x, robot_y);
-        RCLCPP_INFO(get_logger(), "Robot entered zone of object '%s'", gt.id.c_str());
-      } else if (!in_zone && window.active) {
-        RCLCPP_INFO(get_logger(), "Robot exited zone of object '%s'", gt.id.c_str());
+        RCLCPP_INFO(get_logger(), "Object '%s' entered visibility zone", gt.id.c_str());
+      } else if (!visible && window.active) {
+        RCLCPP_INFO(get_logger(), "Object '%s' left visibility zone", gt.id.c_str());
         flushWindow(window);
         window.close();
       }

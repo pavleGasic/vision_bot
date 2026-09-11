@@ -26,7 +26,7 @@ namespace visionbot_benchmark
       void latencyCallback(const std_msgs::msg::Float32::SharedPtr msg);
 
       void flushWindow(const DetectionWindow & window);
-      void updateZones(double robot_x, double robot_y);
+      void updateVisibility(double robot_x, double robot_y, double robot_yaw);
 
       rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
       rclcpp::Subscription<vision_msgs::msg::Detection2DArray>::SharedPtr detection_sub_;
@@ -37,6 +37,7 @@ namespace visionbot_benchmark
       std::string model_name_;
       double robot_x_{0.0};
       double robot_y_{0.0};
+      double robot_yaw_{0.0};
       float last_inference_ms_{0.0f};
   };
 };
