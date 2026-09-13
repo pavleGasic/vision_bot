@@ -24,14 +24,21 @@ from geometry_msgs.msg import Point
 FOV_HALF_RAD = 0.8901  # 51 degrees, matches metrics_logger
 
 OBJECTS = [
-    {"id": "person_standing", "x": 3.42,  "y":  4.03, "max_range_m": 5.0},
-    {"id": "visitor_kid",     "x": 0.69,  "y": -1.80, "max_range_m": 2.0},
-    {"id": "couch",           "x": 0.90,  "y": -1.51, "max_range_m": 2.0},
-    {"id": "refrigerator",    "x": 8.70,  "y": -1.03, "max_range_m": 5.0},
-    {"id": "suitcase",        "x": -3.37, "y": -4.26, "max_range_m": 2.0},
-    {"id": "chair_office",    "x": -8.16, "y": -3.62, "max_range_m": 4.5},
-    {"id": "chairs_kitchen",  "x": 6.63,  "y":  0.94, "max_range_m": 5.0},
-    {"id": "chairs_balcony",  "x": -0.53, "y":  4.10, "max_range_m": 3.0},
+    {"id": "person_standing", "x":  3.42, "y":  4.03, "max_range_m": 5.0},
+    {"id": "visitor_kid",     "x":  0.69, "y": -1.80, "max_range_m": 3.0},
+    {"id": "couch",           "x":  0.90, "y": -1.51, "max_range_m": 4.0},
+    {"id": "refrigerator",    "x":  8.86, "y": -0.71, "max_range_m": 5.0},
+    {"id": "suitcase",        "x": -3.37, "y": -4.26, "max_range_m": 3.5},
+    {"id": "couch_bedroom",   "x": -4.73, "y": -4.85, "max_range_m": 4.0},
+    {"id": "chair_office",    "x": -7.54, "y": -3.78, "max_range_m": 3.5},
+    {"id": "chairs_kitchen",  "x":  6.63, "y":  0.94, "max_range_m": 4.0},
+    {"id": "chairs_balcony",  "x": -0.02, "y":  3.95, "max_range_m": 3.5},
+    {"id": "bicycle",         "x":  2.59, "y":  4.94, "max_range_m": 4.0},
+    {"id": "backpack",        "x": -8.80, "y": -2.49, "max_range_m": 3.0},
+    {"id": "bed",             "x": -6.02, "y":  1.90, "max_range_m": 4.0},
+    {"id": "laptop",          "x": -4.64, "y":  1.65, "max_range_m": 2.5},
+    {"id": "oven",            "x":  8.79, "y": -1.73, "max_range_m": 3.5},
+    {"id": "vase",            "x": -0.17, "y":  5.07, "max_range_m": 2.5},
 ]
 
 
