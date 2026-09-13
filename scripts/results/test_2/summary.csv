@@ -1,0 +1,5 @@
+model,recall_mean,recall_std,precision_mean,precision_std,latency_mean,latency_std,n_runs
+yolo11n,0.7609,0.0307,0.7955,0.0321,9.9272,0.3588,2
+yolo11s,0.6919,0.0168,0.7349,0.0059,11.0074,1.1011,2
+yolov8n,0.6600,0.0283,0.7174,0.0307,10.4666,0.1010,2
+yolov8s,0.6852,0.0262,0.7436,0.0231,10.5016,0.6052,2

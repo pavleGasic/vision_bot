@@ -38,7 +38,7 @@ OBJECTS = [
     {"id": "bed",             "x": -6.02, "y":  1.90, "max_range_m": 4.0},
     {"id": "laptop",          "x": -4.64, "y":  1.65, "max_range_m": 2.5},
     {"id": "oven",            "x":  8.79, "y": -1.73, "max_range_m": 3.5},
-    {"id": "vase",            "x": -0.17, "y":  5.07, "max_range_m": 2.5},
+    {"id": "vase",            "x": -0.17, "y":  5.07, "max_range_m": 4.5},
 ]
 
 

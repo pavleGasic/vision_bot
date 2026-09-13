@@ -31,13 +31,13 @@ def generate_launch_description():
 
   world_arg = DeclareLaunchArgument(
     'world_name',
-    default_value='yolo',
+    default_value='small_house_benchmark',
     description='Gazebo world to benchmark (without .world or .sdf extension)'
   )
 
   map_arg = DeclareLaunchArgument(
     'map_name',
-    default_value='benchmark',
+    default_value='small_house_benchmark',
     description='Nav2 map name to load from visionbot_localization/maps (without .yaml extension)'
   )
 

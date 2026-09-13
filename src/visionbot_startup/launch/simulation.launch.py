@@ -77,7 +77,7 @@ def generate_launch_description():
       )
     ),
     launch_arguments={
-      'map_name': 'benchmark'
+      'map_name': 'small_house_benchmark'
     }.items(),
     condition=UnlessCondition(use_slam)
   )

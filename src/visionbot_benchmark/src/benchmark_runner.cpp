@@ -13,14 +13,16 @@ namespace visionbot_benchmark
 
     waypoints_ = {
       {0.0, 0.0, 0.0, "Start"},
-      {-1.5, -3.1, 0.6, "couch + visitor_kid"},
-      {3.4, 2.0, 1.57, "person_standing"},
-      {-0.5, 2.5, 1.57, "chairs_balcony"},
-      {4.8, 0.9, 0.0, "chairs_kitchen"},
-      {6.0, -1.0, 0.0, "refrigerator"},
-      {-4.5, -2.6, -1.57, "suitcase"},
-      {-6.2, -3.6, 3.14, "chair_office"},
-      {0.0, 0.0, 0.0, "Homse"},
+      {-0.85, -4.1, 1, "living room [couch, visitor_kid]"},
+      {6.8, -1.6, 0.0, "kitchen appliances [frigde, oven]"},
+      {6.8, -1.6, 1.57, "kitchen [chairs_kitchen]"},
+      {3.6, 1.7, 1.57, "balcony [person_standing, bicycle]"},
+      {0.2, 2.1, 1.57, "balcony [chairs_balcony, vase]"},
+      {-4.46, 1.3, 1.57, "bedroom [bed, laptop]"},
+      {-7.8, 1, 1.57, "bedroom [bed, laptop]"},
+      {-4.3, -2.5, -1.57, "office [suitcase, couch_bedroom]"},
+      {-6.6, -2.3, 3.14, "office [chair_office, backpack]"},
+      {0.0, 0.0, 0.0, "Home"},
     };
 
     timer_ = this->create_wall_timer(1s, [this]() {

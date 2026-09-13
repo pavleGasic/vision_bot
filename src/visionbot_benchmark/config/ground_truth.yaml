@@ -45,6 +45,13 @@ objects:
     y: -4.26
     max_range_m: 3.5
 
+  - id: couch_bedroom
+    coco_class: 57
+    coco_name: couch
+    x: -4.73
+    y: -4.85
+    max_range_m: 3.5
+
   - id: chair_office
     coco_class: 56
     coco_name: chair
@@ -71,7 +78,7 @@ objects:
     coco_name: bicycle
     x: 2.59
     y: 4.94
-    max_range_m: 4.0
+    max_range_m: 6.0
 
   - id: backpack
     coco_class: 24
@@ -106,4 +113,4 @@ objects:
     coco_name: vase
     x: -0.17
     y: 5.07
-    max_range_m: 2.5
+    max_range_m: 6.0

@@ -35,7 +35,7 @@ namespace visionbot_benchmark
       std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
       std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
-      std::array<DetectionWindow, 14> windows_;
+      std::array<DetectionWindow, 15> windows_;
       std::ofstream csv_;
       std::string model_name_;
       float last_inference_ms_{0.0f};
