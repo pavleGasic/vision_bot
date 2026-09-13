@@ -1,55 +1,49 @@
 # VisionBot
 
-**VisionBot** is a mobile robot platform developed as part of a Master's thesis project.
+**VisionBot** is a mobile robot platform developed as part of a Master's thesis project. The research goal is to analyze and compare the performance of YOLO-based object detection models running on a Raspberry Pi 5 in a realistic autonomous navigation scenario using ROS 2 and Gazebo.
 
-The goal of this project is to design and implement an intelligent rover-like robot capable of AI-based vision processing (e.g., face recognition).
+![VisionBot in Gazebo simulation](docs/gazebo_screenshot.png)
 
 ## Requirements
 
-- Ubuntu 24.04 (recommended)
+- Ubuntu 24.04
 - ROS 2 Jazzy
 - Gazebo Harmonic
-- colcon
-- RViz2
-
-Make sure ROS 2 is sourced:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-```
-
-## Build Instructions
-
-Navigate to your ROS 2 workspace and build:
-
-```bash
-cd ~/ros2_ws
 colcon build --symlink-install
-```
-
-After successful build, source the workspace:
-
-```bash
 source install/setup.bash
 ```
 
 ## Running the Simulation
 
-After building and sourcing your workspace, you can launch the full Gazebo simulation of VisionBot using:
-
 ```bash
-ros2 launch vision_bot sim.launch.py
+# Full simulation with pre-built map (navigation mode)
+ros2 launch visionbot_startup simulation.launch.py
+
+# With SLAM (mapping mode)
+ros2 launch visionbot_startup simulation.launch.py use_slam:=true
 ```
 
-### Visualize in RViz2
+## Benchmark
 
-To open RViz2 separately:
+See [BENCHMARK.md](BENCHMARK.md) for methodology, model comparison results, and how to reproduce the benchmark runs.
 
-```bash
-rviz2
+## Repository Structure
+
+```
+src/
+├── visionbot_description/   # Robot URDF, Gazebo simulation, sensors
+├── visionbot_control/       # Safety stop, heartbeat, twist_mux
+├── visionbot_localization/  # EKF (local) + AMCL (global localization)
+├── visionbot_navigation/    # Nav2 stack + SLAM Toolbox
+├── visionbot_planning/      # Custom A* planner + Pure Pursuit controller
+├── visionbot_perception/    # YOLO detector node (swappable model via param)
+├── visionbot_benchmark/     # Benchmark runner + metrics logger
+└── visionbot_startup/       # Main bringup launch files
 ```
 
 ## Author
 
-Pavle Gasic
-Master Thesis Project – Vision-Based Mobile Robot Platform
+Pavle Gasic — Master's Thesis, 2025
