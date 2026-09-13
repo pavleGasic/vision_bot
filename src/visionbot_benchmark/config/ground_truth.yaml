@@ -31,11 +31,11 @@ objects:
     y: -1.51
     max_range_m: 4.0
 
-  - id: regrigerator
+  - id: refrigerator
     coco_class: 72
-    coco_name: regrigerator
-    x: 8.70
-    y: -1.03
+    coco_name: refrigerator
+    x: 8.86
+    y: -0.71
     max_range_m: 5.0
 
   - id: suitcase
@@ -48,8 +48,8 @@ objects:
   - id: chair_office
     coco_class: 56
     coco_name: chair
-    x: -8.16
-    y: -3.62
+    x: -7.54
+    y: -3.78
     max_range_m: 3.5
 
   - id: chairs_kitchen
@@ -60,8 +60,50 @@ objects:
     max_range_m: 4.0
 
   - id: chairs_balcony
-    coco_class: 0
-    coco_name: chairs
-    x: -0.53
-    y: 4.10
+    coco_class: 56
+    coco_name: chair
+    x: -0.02
+    y: 3.95
     max_range_m: 3.5
+
+  - id: bicycle
+    coco_class: 1
+    coco_name: bicycle
+    x: 2.59
+    y: 4.94
+    max_range_m: 4.0
+
+  - id: backpack
+    coco_class: 24
+    coco_name: backpack
+    x: -8.80
+    y: -2.49
+    max_range_m: 3.0
+
+  - id: bed
+    coco_class: 59
+    coco_name: bed
+    x: -6.02
+    y: 1.90
+    max_range_m: 4.0
+
+  - id: laptop
+    coco_class: 63
+    coco_name: laptop
+    x: -4.64
+    y: 1.65
+    max_range_m: 2.5
+
+  - id: oven
+    coco_class: 68
+    coco_name: oven
+    x: 8.79
+    y: -1.73
+    max_range_m: 3.5
+
+  - id: vase
+    coco_class: 75
+    coco_name: vase
+    x: -0.17
+    y: 5.07
+    max_range_m: 2.5
