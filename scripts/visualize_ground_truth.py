@@ -4,15 +4,20 @@ from rclpy.node import Node
 from visualization_msgs.msg import Marker, MarkerArray
 
 OBJECTS = [
-    ("person",        3.42,  4.03),
-    ("couch",         0.90, -1.51),
-    ("refrigerator",  8.70, -1.03),
-    ("suitcase",     -3.37, -4.26),
-    ("chair_office", -8.16, -3.62),
-    ("chairs_kitchen",6.63,  0.94),
-    ("chairs_balcony",-0.53, 4.10),
-    ("visitor_kid",   0.69, -1.80),
-    ("chair",        -4.27, -4.72),
+    ("person_standing",  3.42,  4.03),
+    ("visitor_kid",      0.69, -1.80),
+    ("couch",            0.90, -1.51),
+    ("refrigerator",     8.86, -0.71),
+    ("suitcase",        -3.37, -4.26),
+    ("chair_office",    -7.54, -3.78),
+    ("chairs_kitchen",   6.63,  0.94),
+    ("chairs_balcony",  -0.02,  3.95),
+    ("bicycle",          2.59,  4.94),
+    ("backpack",        -8.80, -2.49),
+    ("bed",             -6.02,  1.90),
+    ("laptop",          -4.64,  1.65),
+    ("oven",             8.79, -1.73),
+    ("vase",            -0.17,  5.07),
 ]
 
 
