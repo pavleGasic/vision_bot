@@ -17,11 +17,14 @@ namespace visionbot_benchmark
     float inference_ms_sum{0.0f};
     double entry_x{0.0};
     double entry_y{0.0};
+    std::string fp_class{};
+    float fp_conf{0.0f};
 
     void open(const GroundTruth & gt, double robot_x, double robot_y);
     void close();
     void recordFrame(float inference_ms);
     void recordDetection(float confidence);
+    void recordFalsePositive(const std::string & class_id, float confidence);
 
     float avgInferenceMs() const;
     bool detected() const { return detection_count > 0; }

@@ -10,6 +10,8 @@ namespace visionbot_benchmark
     detection_count = 0;
     max_confidence = 0.0f;
     inference_ms_sum = 0.0f;
+    fp_class = {};
+    fp_conf = 0.0f;
     entry_x = robot_x;
     entry_y = robot_y;
   }
@@ -39,5 +41,13 @@ namespace visionbot_benchmark
       return 0.0f;
     }
     return inference_ms_sum / static_cast<float>(frames_visible);
+  }
+
+  void DetectionWindow::recordFalsePositive(const std::string & class_id, float confidence)
+  {
+    if (confidence > fp_conf) {
+      fp_conf = confidence;
+      fp_class = class_id;
+    }
   }
 }

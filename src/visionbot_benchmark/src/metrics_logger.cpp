@@ -20,8 +20,7 @@ namespace visionbot_benchmark
     declare_parameter<std::string>("output_dir", "/tmp/visionbot_benchmark");
 
     model_name_ = get_parameter("model_name").as_string();
-    if (model_name_.empty())
-    {
+    if (model_name_.empty()) {
       RCLCPP_FATAL(get_logger(), "Parameter 'model_name' is required");
       throw std::runtime_error("Parameter 'model_name' is required");
     }
@@ -36,14 +35,16 @@ namespace visionbot_benchmark
       throw std::runtime_error("Failed to open CSV file: " + path);
     }
 
-    csv_ << "model_name,gt_object_id,coco_name,detected,max_confidence,detection_count,frames_visible,inference_ms_avg,entry_x,entry_y\n";
+    csv_ << "model_name,gt_object_id,coco_name,detected,max_confidence,detection_count,"
+            "frames_visible,inference_ms_avg,entry_x,entry_y,fp_class,fp_conf\n";
 
-    odom_sub_ = create_subscription<nav_msgs::msg::Odometry>(
-      "/odometry/filtered", sensor_qos(), std::bind(&MetricsLogger::odomCallback, this, std::placeholders::_1));
+    tf_buffer_ = std::make_shared<tf2_ros::Buffer>(get_clock());
+    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
     latency_sub_ = create_subscription<std_msgs::msg::Float32>(
       "/inference_latency_ms", 10, std::bind(&MetricsLogger::latencyCallback, this, std::placeholders::_1));
     detection_sub_ = create_subscription<vision_msgs::msg::Detection2DArray>(
-      "/detections", 10, std::bind(&MetricsLogger::detectionCallback, this, std::placeholders::_1));
+      "/detections", sensor_qos(), std::bind(&MetricsLogger::detectionCallback, this, std::placeholders::_1));
 
     RCLCPP_INFO(get_logger(), "MetricsLogger initialized. Logging to: %s", path.c_str());
   }
@@ -60,29 +61,35 @@ namespace visionbot_benchmark
     }
   }
 
-  void MetricsLogger::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg)
-  {
-    robot_x_ = msg->pose.pose.position.x;
-    robot_y_ = msg->pose.pose.position.y;
-
-    const auto & q = msg->pose.pose.orientation;
-    robot_yaw_ = std::atan2(
-      2.0 * (q.w * q.z + q.x * q.y),
-      1.0 - 2.0 * (q.y * q.y + q.z * q.z)
-    );
-    updateVisibility(robot_x_, robot_y_, robot_yaw_);
-  }
-
   void MetricsLogger::detectionCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg)
   {
-    for (auto & window : windows_)
-    {
+    geometry_msgs::msg::TransformStamped tf;
+    try {
+      tf = tf_buffer_->lookupTransform("map", "base_link", msg->header.stamp, rclcpp::Duration::from_seconds(0.1));
+    } catch (const tf2::TransformException & ex) {
+      RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 2000, "TF lookup failed %s", ex.what());
+      return;
+    }
+
+    const double robot_x = tf.transform.translation.x;
+    const double robot_y = tf.transform.translation.y;
+    const auto & q = tf.transform.rotation;
+    const double robot_yaw = std::atan2(
+      2.0 * (q.w * q.z + q.x * q.y),
+      1.0 - 2.0 * (q.y * q.y + q.z * q.z));
+
+    updateVisibility(robot_x, robot_y, robot_yaw);
+
+    for (auto & window : windows_) {
       if (window.active) {
         window.recordFrame(last_inference_ms_);
         for (const auto & detection : msg->detections) {
           if (detection.results.empty()) continue;
-          if (detection.results[0].hypothesis.class_id == window.ground_truth->coco_name) {
-            window.recordDetection(detection.results[0].hypothesis.score);
+          const auto & hyp = detection.results[0].hypothesis;
+          if (hyp.class_id == window.ground_truth->coco_name) {
+            window.recordDetection(hyp.score);
+          } else {
+            window.recordFalsePositive(hyp.class_id, hyp.score);
           }
         }
       }
@@ -105,7 +112,9 @@ namespace visionbot_benchmark
          << static_cast<int>(window.frames_visible) << ","
          << std::setprecision(2) << window.avgInferenceMs() << ","
          << window.entry_x << ","
-         << window.entry_y
+         << window.entry_y << ","
+         << window.fp_class << ","
+         << std::setprecision(4) << window.fp_conf
          << "\n";
     csv_.flush();
   }

@@ -10,6 +10,17 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
   use_slam = LaunchConfiguration('use_slam')
+  model_path = LaunchConfiguration('model_path')
+
+  model_path_arg = DeclareLaunchArgument(
+    'model_path',
+    default_value=os.path.join(
+      get_package_share_directory('visionbot_perception'),
+      'models',
+      'yolov8n.pt'
+    ),
+    description='YOLO model to benchmark (.pt or .onnx file)'
+  )
 
   use_slam_arg = DeclareLaunchArgument(
     'use_slam',
@@ -33,7 +44,7 @@ def generate_launch_description():
     ),
     launch_arguments={
       'use_gui': LaunchConfiguration('use_gui'),
-      'world_name': 'yolo'
+      'world_name': 'small_house_benchmark'
     }.items()
   )
 
@@ -82,6 +93,18 @@ def generate_launch_description():
     condition=UnlessCondition(use_slam)
   )
 
+  perception = IncludeLaunchDescription(
+    PythonLaunchDescriptionSource(
+      os.path.join(
+        get_package_share_directory('visionbot_perception'),
+        'launch', 'perception.launch.py'
+      )
+    ),
+    launch_arguments={
+      'model_path': model_path
+    }.items()
+  )
+
   slam = IncludeLaunchDescription(
     PythonLaunchDescriptionSource(
       os.path.join(
@@ -107,6 +130,7 @@ def generate_launch_description():
   )
 
   return LaunchDescription([
+    model_path_arg,
     use_slam_arg,
     use_gz_gui_arg,
     gazebo,
@@ -114,6 +138,7 @@ def generate_launch_description():
     local_localization,
     global_localization,
     robot_navigation,
+    perception,
     slam,
     rviz
   ])

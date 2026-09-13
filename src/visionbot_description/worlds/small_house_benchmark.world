@@ -1,0 +1,366 @@
+<sdf version='1.10'>
+  <world name='default'>
+    <physics name='10ms' type='ignored'>
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>100</real_time_update_rate>
+    </physics>
+
+    <scene>
+      <shadows>false</shadows>
+      <grid>true</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+    </scene>
+
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>5.5645e-06 2.28758e-05 -4.23884e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+
+    <!-- Models -->
+    <model name='HouseWallB_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_HouseWallB_01</uri>
+      </include>
+      <pose>0 0 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='FloorB_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_FloorB_01</uri>
+      </include>
+      <pose>0 0 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='RoomWall_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_RoomWall_01</uri>
+      </include>
+      <pose>-6.09755 -1.49618 0.028124 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='KitchenCabinet_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_KitchenCabinet_01</uri>
+      </include>
+      <pose>8.00201 -3.83651 0.012068 0 0 -3.14</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='SofaC_01_001'>
+      <static>true</static>
+      <include>
+        <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/sofa</uri>
+      </include>
+      <pose>0.903522 -1.50531 0.000119 0 0 -1.58114</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='KitchenTable_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_KitchenTable_01</uri>
+      </include>
+      <pose>6.55269 0.951173 0 0 0 -1.56413</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='ReadingDesk_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ReadingDesk_01</uri>
+      </include>
+      <pose>-8.9965 -3.57228 0.001454 0 0 -0.008227</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='Wardrobe_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Wardrobe_01</uri>
+      </include>
+      <pose>-8.83052 0.201496 0.000704 0 0 1.615647</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='TVCabinet_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_TVCabinet_01</uri>
+      </include>
+      <pose>0.629509 -5.183576 -0.017049 0 0 1.5792</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='NightStand_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_NightStand_01</uri>
+      </include>
+      <pose>-7.72551 2.86042 0.005258 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='NightStand_01_002'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_NightStand_01</uri>
+      </include>
+      <pose>-4.40734 2.86042 0.03289 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='ChairA_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ChairA_01</uri>
+      </include>
+      <pose>7.11516 0.209028 0 0 0 -1.55607</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='ChairA_01_002'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ChairA_01</uri>
+      </include>
+      <pose>6.25506 0.219468 0 0 0 -1.50414</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='ChairA_01_003'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ChairA_01</uri>
+      </include>
+      <pose>6.06678 1.68075 0 0 0 1.56986</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='ChairA_01_004'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_ChairA_01</uri>
+      </include>
+      <pose>7.00277 1.67074 0 0 0 1.52363</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='Carpet_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Carpet_01</uri>
+      </include>
+      <pose>0.78505 -1.106647 0.001106 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='Carpet_01_002'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Carpet_01</uri>
+      </include>
+      <pose>6.481416 0.819475 0.000585 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='Trash_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Trash_01</uri>
+      </include>
+      <pose>2.198037 -1.91969 0.000903 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='Door_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_Door_01</uri>
+      </include>
+      <pose>6.001449 -5.549002 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='FoldingDoor_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_FoldingDoor_01</uri>
+      </include>
+      <pose>-2.461096 1.844219 0.041881 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='FoldingDoor_01_002'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_FoldingDoor_01</uri>
+      </include>
+      <pose>-2.461096 -4.05332 0.041881 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='TV_01_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_TV_01</uri>
+      </include>
+      <pose>0.824259 -5.382968 0.676282 0 0 -1.561744</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name='TV_02_001'>
+      <static>true</static>
+      <include>
+        <uri>model://aws_robomaker_residential_TV_02</uri>
+      </include>
+      <pose>-6.197322 -1.388739 0.676282 0 0 -1.561744</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- External Includes sa ispravnim Fuel URL-ovima -->
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/monitorandkeyboard/2</uri>
+      <name>MonitorAndKeyboard</name>
+      <pose>-9.139691 -3.655927 0.745105 0 0 -3.114985</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/suitcase2/2</uri>
+      <name>Suitcase2</name>
+      <pose>-3.36699 -4.25887 0 0 0 -0.361093</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/officechairblack/2</uri>
+      <name>OfficeChairBlack</name>
+      <pose>-7.537138 -3.784897 0 0 0 -1.86093</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/standing person/3</uri>
+      <name>person_standing</name>
+      <pose>3.41938 4.030292 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/visitorkidsit/2</uri>
+      <name>VisitorKidSit</name>
+      <pose>0.694948 -1.800066 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/ball bearing/3</uri>
+      <name>ball_bearing</name>
+      <pose>9.53203 -3.624749 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/oven/1</uri>
+      <name>Oven</name>
+      <pose>8.793071 -1.727464 0 0 0 -3.13813</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/abdurrahman/models/refrigerator/1</uri>
+      <name>Fridge</name>
+      <pose>8.861029 -0.707081 0 0 0 -3.12646</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/abdurrahman/models/armchair/1</uri>
+      <name>Armchair</name>
+      <pose>-0.90893 3.8639 0 0 0 0.342101</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/abdurrahman/models/armchair/1</uri>
+      <name>Armchair_0</name>
+      <pose>0.86129 4.033133 0 0 0 -0.324122</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/cole/models/sunken vase/4</uri>
+      <name>Pot01</name>
+      <pose>-0.16804 5.067219 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/athackst/models/bicycle/2</uri>
+      <name>bicycle_1</name>
+      <pose>2.585658 4.942867 0.011071 0 -0.732075 -1.408662</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/abdurrahman/models/bed/1</uri>
+      <name>Bed</name>
+      <pose>-6.02278 1.90021 0.018813 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/googleresearch/models/travel_mate_p_series_notebook/1</uri>
+      <name>Travel_Mate_P_series_Notebook</name>
+      <pose>-4.640697 1.648266 -0.001245 0 0 0</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/backpack/3</uri>
+      <name>Backpack</name>
+      <pose>-8.800156 -2.493332 0 0 0 2.04575</pose>
+    </include>
+
+    <include>
+      <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/sofa</uri>
+      <name>Sofa</name>
+      <pose>-4.731876 -4.851569 0.00012 0 0 1.57861</pose>
+    </include>
+
+    <!-- Lights -->
+    <light name='LivingRoom_CeilingLight_0' type='point'>
+      <pose>1.194296 4.155759 2.2 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>1</intensity>
+      <direction>0 0 -1</direction>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <linear>0.01</linear>
+        <constant>0.32</constant>
+        <quadratic>0.03</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+
+    <light name='BedRoom_CeilingLight_0' type='point'>
+      <pose>-6.451061 -0.69204 2 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>1</intensity>
+      <direction>0 0 -1</direction>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <linear>0.01</linear>
+        <constant>0.32</constant>
+        <quadratic>0.03</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+  </world>
+</sdf>
